@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[基金]自然科学基金写法 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[基金]自然科学基金写法</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:02:30</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="【科学问题】"><a href="#【科学问题】" class="headerlink" title="【科学问题】"></a>【科学问题】</h2><p>科学问题.</p>
+<p>重点解答：XXX是什么？为什么？</p>
+<p>怎么办？就不属于科学范畴.</p>
+<p>为什么要做，别人是怎么做的，做的结果如何，我准备怎么做，是不是能做出来，做出来以后会有什么效果，我是不是具有做这个事情的能力和水平。</p>
+<p>科学问题是灵魂，后面的研究内容和研究方案是针对项目涉及的科学问题展开的研究。也就是说，根据科学问题分解为几个互相独立又互相联系的研究内容，通过这几个研究内容的解决，才能解决这个科学问题；而研究方案则是根据每个研究内容采取的研究方案而设计。</p>
+<h2 id="一-项目的研究内容、研究目标，以及拟解决的关键科学问题"><a href="#一-项目的研究内容、研究目标，以及拟解决的关键科学问题" class="headerlink" title="一. 项目的研究内容、研究目标，以及拟解决的关键科学问题"></a>一. 项目的研究内容、研究目标，以及拟解决的关键科学问题</h2><p>在项目书的撰写过程中，这一部分是整个项目书的重点阐述内容，申请者应该在这一板块将自己的研究课题细化的呈现给阅读者，让阅读者全面的了解本课题的主要目标和研究内容，以及拟解决的关键科学问题是什么。</p>
+<p><strong>研究内容在设计和取舍时要注意平衡几个原则</strong>：</p>
+<ul>
+<li>以研究的课题和科学问题为导向，紧紧围绕研究假说展开，紧扣科学问题，与研究目标相互呼应。既要避免内容过于简单，没有深度，又要避免内容“宽泛”而“空洞”，要突出研究重点。</li>
+<li>平衡研究内容之间的逻辑关系， 考虑所选的研究内容是否是解决科学问题的最佳可行方案，是否可以充分解决科学问题。</li>
+<li>把握好前期研究基础与本课题研究内容的关系，在说明拟开展课题与前期工作具有连续性的同时，注意本研究内容的不同之处。</li>
+<li>在项目周期和技术可行的支撑下，要考虑研究内容是否可以顺利完成。</li>
+<li>特别注意的是研究方法不等同于研究内容。</li>
+</ul>
+<p>研究目标作为研究内容的总结性陈述，要求：<strong>明确、精炼、合理</strong>。 要与研究课题和研究内容相互呼应，避免目标过多。</p>
+<p>拟解决的关键问题应包括：理论上的关键科学问题和技术上的**“瓶颈”问题**。除了提出问题，应相应的给出解决方案和对策，为评审人增加项目可以顺利开展的信心。</p>
+<h2 id="二-研究方案"><a href="#二-研究方案" class="headerlink" title="二. 研究方案"></a>二. 研究方案</h2><p>研究方案其实就是研究设计的具体实施步骤，可以按照提纲中的研究方法、技术路线、实验手段、关键技术等，逐条撰写。</p>
+<ol>
+<li><strong>研究方法</strong>是指研究内容在具体的实施过程中使用的技术方法，可以是实验的手段也可以是方法学研究等。</li>
+<li><strong>技术路线图</strong>：整个项目可以用一个技术路线图描述，也可以根据研究内容分为几个技术路线图，如分数据分析、机制研究、实验验证三个技术路线图。</li>
+<li><strong>关键技术</strong>是指在整个研究过程中的主要技术，关系着整个研究能否成功的核心技术，应详细说明。</li>
+</ol>
+<h2 id="三-可行性分析"><a href="#三-可行性分析" class="headerlink" title="三. 可行性分析"></a>三. 可行性分析</h2><p>可行性分析，一般紧跟着研究方案，从各个角度阐述本研究实施的可行性。可以参照以下几个方面进行论述：课题的立项依据充分；前期研究基础扎实或预实验结果可行；实验设计合理；技术或者平台条件成熟；研究团队具有科研实力且人员配置合理。因为项目书的后面部分还有研究基础和工作条件的具体阐述，此部分涉及的研究基础和工作条件可以总结性、系统的陈述。</p>
+<p>下面给出一些常用的可行性阐述方式：</p>
+<ol>
+<li><strong>理论上可行</strong>：已有的文献和自己的预实验研究成果，得到本课题的科学假说，说明假说是有根据的、合理的。 例：本研究项目是在分析国内外相关研究，以及本课题前期实验的基础上凝练出来的，立项依据充分，提出的假说合理。预实验结果可靠，可完成预期的目标。目前已完成本项目的部分研究内容，如……。这些预实验为本项目的设计提供了可靠的依据，也为本研究项目的实施奠定了基础。</li>
+<li><strong>技术与条件可行</strong>：课题的设计，研究方案，实验技术等，都是切实可行的，具有可操作性。具有完备的技术平台和科研设施。 例：实验设备条件优越，为本项目实施提供硬件保障。已具备了完整的生物化学与分子生物学和细胞生物学技术平台,例如：……;也具有先进完善的仪器设备,主要有……。</li>
+<li><strong>团队研究能力可行</strong>：课题组成员涵盖了本课题所需的各学科的人才，熟练掌握课题完成所需要的实验技术等，具有可实施性。 例：研究团队结构合理，具有完成本项目的能力。课题申请者……;课题组成员结构合理,涵盖了本课题所需的各学科的人才。该团队主要从事……的研究，具有较深厚的研究背景；同时熟练掌握各种实验技术的操作方法。</li>
+</ol>
+<h2 id="四-特色与创新"><a href="#四-特色与创新" class="headerlink" title="四. 特色与创新"></a>四. 特色与创新</h2><p>写好课题研究的特色与创新部分是基金项目申请成功的关键因素。</p>
+<p>因为这一部分内容主要是用来阐述本研究课题的亮点，也可以侧面证明本课题是值得开展的，简单说也就是提供课题值得资助的理由。这部分内容要分析比较本项目与国内外相关研究不同的地方，列出课题更有特色和创新的地方。应从立论依据、研究内容、研究方法与手段、实验方案上对研究特色与创新点进行概括、提炼并集中陈述。创新性应求真务实，与研究内容和方案相对应，不能假、大、空。创新的要点也应简洁明了，可以是学术观点（理论）的创新、技术方法的创新或者研究新方式的创新（如独特的视角、解决问题的方法等）。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E5%9F%BA%E9%87%91-%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%A6%E5%9F%BA%E9%87%91%E5%86%99%E6%B3%95/">http://example.com/2025/06/26/%E5%9F%BA%E9%87%91-%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%A6%E5%9F%BA%E9%87%91%E5%86%99%E6%B3%95/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%9F%BA%E9%87%91/"># 基金</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E5%AE%9E%E9%AA%8C-SPSS%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C/">[实验]SPSS假设检验</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/code-%E8%B0%B7%E6%AD%8CCoLab%E6%95%99%E7%A8%8B/">[code]谷歌CoLab教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[code]OpenCV应用-教程 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[code]OpenCV应用-教程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;12:53:23</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="一、基于openCV-mediapipe-的人脸识别应用"><a href="#一、基于openCV-mediapipe-的人脸识别应用" class="headerlink" title="一、基于openCV + mediapipe 的人脸识别应用"></a>一、基于openCV + mediapipe 的人脸识别应用</h3><p>wiki整理：OpenCV+mediapipe+python实现视频、实时摄像头人脸检测: 安装依赖 numpy——Python-pip &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;opencv&#x2F;4.5.3_2</p>
+<p>&#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;opencv&#x2F;4.5.3_2&#x2F;lib&#x2F;python3.9&#x2F;site-packages&#x2F;cv2&#x2F;python-3.9&#x2F;cv2.cpython-39-darwin.so</p>
+<p>brew unlink opencv &amp;&amp; brew link –force opencv</p>
+<p>路线1：高清点数 1、安装依赖mediapipe， pip install mediapipe（完成） 2、OpenCV 调用摄像头（完成） 3、机器性能（完成，用FPS抽帧） 4、TPC通信 5、MySQL数据库</p>
+<h3 id="二、基于openCV-dlib-的眨眼识别"><a href="#二、基于openCV-dlib-的眨眼识别" class="headerlink" title="二、基于openCV + dlib 的眨眼识别"></a>二、基于openCV + dlib 的眨眼识别</h3><p>1、参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/">https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/</a></p>
+<p>2、这是CSDN关于【<a target="_blank" rel="noopener" href="https://blog.csdn.net/tzh1342761595/article/details/107525749?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164069506216780366530429%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=164069506216780366530429&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-5-107525749.pc_search_result_cache&utm_term=opencv+%E7%9D%81%E9%97%AD%E7%9C%BC%E6%A3%80%E6%B5%8B&spm=1018.2226.3001.4187">疲劳检测</a>】的应用实现</p>
+<p>3、这是CSDN用眨眼、张嘴实现【<a target="_blank" rel="noopener" href="https://blog.csdn.net/Lee_01/article/details/89151044?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164069506216780366530429%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=164069506216780366530429&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-27-89151044.pc_search_result_cache&utm_term=opencv+%E7%9D%81%E9%97%AD%E7%9C%BC%E6%A3%80%E6%B5%8B&spm=1018.2226.3001.4187">活体检测</a>】</p>
+<p>4、这里是关于绝对面积的说法：</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/65676833/problem-in-my-python-code-that-eye-blinks-are-too-many-detected-using-eye-aspe">https://stackoverflow.com/questions/65676833/problem-in-my-python-code-that-eye-blinks-are-too-many-detected-using-eye-aspe</a></p>
+<h3 id="三、基于openCV-mediapipe实现的瞳孔追踪"><a href="#三、基于openCV-mediapipe实现的瞳孔追踪" class="headerlink" title="三、基于openCV + mediapipe实现的瞳孔追踪"></a>三、基于openCV + mediapipe实现的瞳孔追踪</h3><p><a target="_blank" rel="noopener" href="https://google.github.io/mediapipe/solutions/iris.html">https://google.github.io/mediapipe/solutions/iris.html</a></p>
+<h3 id="四、基于OpenCV-Python-实现简单数字识别-OCR"><a href="#四、基于OpenCV-Python-实现简单数字识别-OCR" class="headerlink" title="四、基于OpenCV-Python 实现简单数字识别 OCR"></a>四、基于OpenCV-Python 实现简单数字识别 OCR</h3><p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9413216/simple-digit-recognition-ocr-in-opencv-python?rq=1">https://stackoverflow.com/questions/9413216/simple-digit-recognition-ocr-in-opencv-python?rq=1</a></p>
+<h3 id="五、Python中计算任意两个向量的夹角"><a href="#五、Python中计算任意两个向量的夹角" class="headerlink" title="五、Python中计算任意两个向量的夹角"></a>五、Python中计算任意两个向量的夹角</h3><p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://www.jb51.net/article/164697.htm">https://www.jb51.net/article/164697.htm</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/code-OpenCV%E5%BA%94%E7%94%A8-%E6%95%99%E7%A8%8B/">http://example.com/2025/06/26/code-OpenCV%E5%BA%94%E7%94%A8-%E6%95%99%E7%A8%8B/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/code/"># code</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/code-VLOOKUP%E2%80%94%E2%80%94%E7%94%A8Python%E6%8B%BC%E6%8E%A5CSV%E6%95%B0%E6%8D%AE%E8%A1%A8/">[code]VLOOKUP——用Python拼接CSV数据表</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/code-MySQL%E6%95%99%E7%A8%8B/">[code]MySQL教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

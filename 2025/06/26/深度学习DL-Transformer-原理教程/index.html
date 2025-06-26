@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[深度学习DL]Transformer-原理教程 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[深度学习DL]Transformer-原理教程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:27:22</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、Transformer原理"><a href="#一、Transformer原理" class="headerlink" title="一、Transformer原理"></a>一、Transformer原理</h1><p>Transfomer官方文档示例： <a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/main/en/model_doc/vit">https://huggingface.co/docs/transformers/main/en/model_doc/vit</a></p>
+<p>包含微调： <a target="_blank" rel="noopener" href="https://huggingface.co/blog/fine-tune-vit">https://huggingface.co/blog/fine-tune-vit</a></p>
+<p>包含部署：<a target="_blank" rel="noopener" href="https://huggingface.co/blog/deploy-vertex-ai">https://huggingface.co/blog/deploy-vertex-ai</a></p>
+<p>李沐精读ViT原文</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FRFt3x0bO94">https://www.youtube.com/watch?v=FRFt3x0bO94</a></p>
+<p>笔记<br><img src="https://s2.loli.net/2024/01/28/kn5U6ZoPVmeIbs2.png" width="100%"></p>
+<p>讲述图像tokennize的过程</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/488561011/answer/3131570354">https://www.zhihu.com/question/488561011/answer/3131570354</a></p>
+<p>从Seq2seq model 到Transformer</p>
+<img src="https://s2.loli.net/2023/09/07/XIQZxhRiWowUtHl.png" width="70%">
+
+<h3 id="0、Seq2seq-model"><a href="#0、Seq2seq-model" class="headerlink" title="0、Seq2seq model"></a>0、Seq2seq model</h3><p>1）Seq2seq适用于Output长度不确定问题：</p>
+<p>语音识别问题</p>
+<p>机器翻译问题</p>
+<p>语音翻译问题…</p>
+<img src="https://s2.loli.net/2023/09/07/viuUkdPyl2p3zjt.png" width="70%">
+
+<p>2）Seq2seq硬解如下问题</p>
+<ul>
+<li>各种NLP问题均可转换为QA问题：1）翻译；2）情感识别；3）语法分析。。。</li>
+<li>QA问题通用 squence2squence model来解</li>
+</ul>
+<img src="https://s2.loli.net/2023/09/07/sl2vCHT7qhAxzpo.png" width="50%">
+
+<img src="https://s2.loli.net/2023/09/07/PwC7zx5XhFI2Y4O.png" width="80%">
+
+<h3 id="1、Transformer-Encoder"><a href="#1、Transformer-Encoder" class="headerlink" title="1、Transformer-Encoder"></a>1、Transformer-Encoder</h3><p>Encoder结构解析</p>
+<img src="https://s2.loli.net/2023/09/07/XpvMaIlAbS5ctPg.png" width="80%">
+
+<h3 id="2、Transformer-Decoder"><a href="#2、Transformer-Decoder" class="headerlink" title="2、Transformer-Decoder"></a>2、Transformer-Decoder</h3><p>1）除了中间遮住部分，decode和encode结构一致</p>
+<p>Decode将self-attention机制转为masked self-attention</p>
+<p>masked self-attention：<br><img src="https://s2.loli.net/2023/09/07/emEXBYaZ5g1poq4.png" width="80%"></p>
+<p>2）Autogressive机制</p>
+<img src="https://s2.loli.net/2023/09/07/4v9QRMaULwOAxni.png" width="80%">
+
+<h3 id="3、Encode-Decoder之间的信息传递"><a href="#3、Encode-Decoder之间的信息传递" class="headerlink" title="3、Encode-Decoder之间的信息传递"></a>3、Encode-Decoder之间的信息传递</h3><p>1）cross attention机制<br><img src="https://s2.loli.net/2023/09/07/OfC1ptRYAeZnIsr.png" width="80%"></p>
+<p>2）训练过程</p>
+<img src="https://s2.loli.net/2023/09/07/5mnldopSR4ZBwqG.png" width="80%">
+
+<h3 id="4、Transformer-self-attention机制及算法【核心】"><a href="#4、Transformer-self-attention机制及算法【核心】" class="headerlink" title="4、Transformer-self-attention机制及算法【核心】"></a>4、Transformer-self-attention机制及算法【核心】</h3><p>1）输入和输出均为vector</p>
+<img src="https://s2.loli.net/2023/09/07/pZJMuOItzfVmvqH.png" width="80%">
+
+<p>2）通过相似度计算α（attention scores）</p>
+<img src="https://s2.loli.net/2023/09/07/LSkYzwTCKoP1isQ.png" width="80%">
+<img src="https://s2.loli.net/2023/09/07/a1Um2oKpEgDM4I5.png" width="40%">
+
+<p>3）Self-attention计算过程向量化：</p>
+<img src="https://s2.loli.net/2023/09/07/DLPHXSEAUK3intR.png" width="60%">
+
+<p>4）多头注意力机制</p>
+<img src="https://s2.loli.net/2023/09/07/xP1C5FYORz4brnS.png" width="80%">
+
+<h3 id="5、Positional-Encoding-机制"><a href="#5、Positional-Encoding-机制" class="headerlink" title="5、Positional Encoding 机制"></a>5、Positional Encoding 机制</h3><img src="https://s2.loli.net/2023/09/07/v3oOiWYQcG5XAz2.png" width="60%">
+
+<h1 id="二、Transformer公式推导"><a href="#二、Transformer公式推导" class="headerlink" title="二、Transformer公式推导"></a>二、Transformer公式推导</h1><p><a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1DxaFiqOKbaFQuxzB_Q33YKuH-Ld0K30r#scrollTo=KqPMDm4F9m0v">https://colab.research.google.com/drive/1DxaFiqOKbaFQuxzB_Q33YKuH-Ld0K30r#scrollTo=KqPMDm4F9m0v</a></p>
+<h3 id="1、Transformer-Multi-Headed-Attention"><a href="#1、Transformer-Multi-Headed-Attention" class="headerlink" title="1、Transformer: Multi-Headed Attention"></a>1、Transformer: Multi-Headed Attention</h3><img src="https://s2.loli.net/2023/09/07/of9VRGPJ1N7riTS.png" width="60%">
+
+<img src="https://s2.loli.net/2023/09/07/WzpByxOtTi9aj2V.png" width="60%">
+
+<img src="https://s2.loli.net/2023/09/07/3uVs1dwqHXL2Oik.png" width="60%">
+
+<h3 id="2、Positional-Encoding"><a href="#2、Positional-Encoding" class="headerlink" title="2、Positional Encoding"></a>2、Positional Encoding</h3><img src="https://s2.loli.net/2023/09/07/3CrPAvFO2XIW8Su.png" width="60%">
+
+<h1 id="三、Transformer图像字幕应用case"><a href="#三、Transformer图像字幕应用case" class="headerlink" title="三、Transformer图像字幕应用case"></a>三、Transformer图像字幕应用case</h1><h3 id="1、主程序（一）：初始化、加载COCO数据集"><a href="#1、主程序（一）：初始化、加载COCO数据集" class="headerlink" title="1、主程序（一）：初始化、加载COCO数据集"></a>1、主程序（一）：初始化、加载COCO数据集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Setup cell.##########————————————————初始化——————————————————————########</span></span><br><span class="line"><span class="keyword">import</span> time, os, json</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> cs231n.gradient_check <span class="keyword">import</span> eval_numerical_gradient, eval_numerical_gradient_array</span><br><span class="line"><span class="keyword">from</span> cs231n.transformer_layers <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> cs231n.captioning_solver_transformer <span class="keyword">import</span> CaptioningSolverTransformer</span><br><span class="line"><span class="keyword">from</span> cs231n.classifiers.transformer <span class="keyword">import</span> CaptioningTransformer</span><br><span class="line"><span class="keyword">from</span> cs231n.coco_utils <span class="keyword">import</span> load_coco_data, sample_coco_minibatch, decode_captions</span><br><span class="line"><span class="keyword">from</span> cs231n.image_utils <span class="keyword">import</span> image_from_url</span><br><span class="line"></span><br><span class="line">%matplotlib inline</span><br><span class="line">plt.rcParams[<span class="string">&#x27;figure.figsize&#x27;</span>] = (<span class="number">10.0</span>, <span class="number">8.0</span>) <span class="comment"># Set default size of plots.</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;image.interpolation&#x27;</span>] = <span class="string">&#x27;nearest&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;image.cmap&#x27;</span>] = <span class="string">&#x27;gray&#x27;</span></span><br><span class="line"></span><br><span class="line">%load_ext autoreload</span><br><span class="line">%autoreload <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rel_error</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; returns relative error &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">max</span>(np.<span class="built_in">abs</span>(x - y) / (np.maximum(<span class="number">1e-8</span>, np.<span class="built_in">abs</span>(x) + np.<span class="built_in">abs</span>(y))))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup cell.##########————————————————加载COCO数据集——————————————————————########</span></span><br><span class="line"><span class="comment"># Load COCO data from disk into a dictionary.</span></span><br><span class="line">data = load_coco_data(pca_features=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print out all the keys and values from the data dictionary.</span></span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> data.items():</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(v) == np.ndarray:</span><br><span class="line">        <span class="built_in">print</span>(k, <span class="built_in">type</span>(v), v.shape, v.dtype)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(k, <span class="built_in">type</span>(v), <span class="built_in">len</span>(v))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、构建transformer-layers-py文件"><a href="#2、构建transformer-layers-py文件" class="headerlink" title="2、构建transformer_layers.py文件"></a>2、构建transformer_layers.py文件</h3><p>实现文件 cs231n&#x2F;transformer_layers.py中的MultiHeadAttention 类</p>
+<p>在文件cs231n&#x2F;transformer_layers.py中实现位置编码函数 PositionalEncoding</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup cell.##########————————————————完成  PositionalEncoding 类——————————————————————########</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PositionalEncoding</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, embed_dim, dropout=<span class="number">0.1</span>, max_len=<span class="number">5000</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(p=dropout)</span><br><span class="line">        <span class="keyword">assert</span> embed_dim % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">        <span class="comment"># Create an array with a &quot;batch dimension&quot; of 1 (which will broadcast</span></span><br><span class="line">        <span class="comment"># across all examples in the batch).</span></span><br><span class="line">        pe = torch.zeros(<span class="number">1</span>, max_len, embed_dim)</span><br><span class="line"></span><br><span class="line">        index = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_len)]</span><br><span class="line">        even_ind = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(embed_dim)<span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line">        odd_ind = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(embed_dim)<span class="keyword">if</span> i % <span class="number">2</span> != <span class="number">0</span>]</span><br><span class="line">        pe[:, :, even_ind] = torch.tensor(</span><br><span class="line">            [[math.sin(i*<span class="built_in">pow</span>(<span class="number">10000</span>, -j/embed_dim))<span class="keyword">for</span> j <span class="keyword">in</span> even_ind]<span class="keyword">for</span> i <span class="keyword">in</span> index])</span><br><span class="line">        pe[:, :, odd_ind] = torch.tensor(</span><br><span class="line">            [[math.cos(i*<span class="built_in">pow</span>(<span class="number">10000</span>, -(j-<span class="number">1</span>)/embed_dim))<span class="keyword">for</span> j <span class="keyword">in</span> odd_ind]<span class="keyword">for</span> i <span class="keyword">in</span> index])</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(<span class="string">&#x27;pe&#x27;</span>, pe)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line"></span><br><span class="line">        N, S, D = x.shape</span><br><span class="line">        <span class="comment"># Create a placeholder, to be overwritten by your code below.</span></span><br><span class="line">        output = torch.empty((N, S, D))</span><br><span class="line"></span><br><span class="line">        pe_x = x+<span class="variable language_">self</span>.pe[:, <span class="number">0</span>:S, <span class="number">0</span>:D]</span><br><span class="line">        output = <span class="variable language_">self</span>.dropout(pe_x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup cell.##########————————————————完成 MultiHeadAttention 类——————————————————————########</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, embed_dim, num_heads, dropout=<span class="number">0.1</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="keyword">assert</span> embed_dim % num_heads == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.key = nn.Linear(embed_dim, embed_dim)</span><br><span class="line">        <span class="variable language_">self</span>.query = nn.Linear(embed_dim, embed_dim)</span><br><span class="line">        <span class="variable language_">self</span>.value = nn.Linear(embed_dim, embed_dim)</span><br><span class="line">        <span class="variable language_">self</span>.proj = nn.Linear(embed_dim, embed_dim)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.attn_drop = nn.Dropout(dropout)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.n_head = num_heads</span><br><span class="line">        <span class="variable language_">self</span>.emd_dim = embed_dim</span><br><span class="line">        <span class="variable language_">self</span>.head_dim = <span class="variable language_">self</span>.emd_dim // <span class="variable language_">self</span>.n_head</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, query, key, value, attn_mask=<span class="literal">None</span></span>):</span><br><span class="line"></span><br><span class="line">        N, S, E = query.shape</span><br><span class="line">        N, T, E = value.shape</span><br><span class="line">        <span class="comment"># Create a placeholder, to be overwritten by your code below.</span></span><br><span class="line">        output = torch.empty((N, S, E))</span><br><span class="line"></span><br><span class="line">        Q = <span class="variable language_">self</span>.query(query)</span><br><span class="line">        K = <span class="variable language_">self</span>.key(key)</span><br><span class="line">        V = <span class="variable language_">self</span>.value(value)</span><br><span class="line">        Q = Q.reshape((N, S, <span class="variable language_">self</span>.n_head, <span class="variable language_">self</span>.head_dim)).permute(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">        K = K.reshape((N, T, <span class="variable language_">self</span>.n_head, <span class="variable language_">self</span>.head_dim)).permute(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">        V = V.reshape((N, T, <span class="variable language_">self</span>.n_head, <span class="variable language_">self</span>.head_dim)).permute(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)  <span class="comment"># (N,H,T,E/H)</span></span><br><span class="line"></span><br><span class="line">        energy = torch.matmul(Q, K.permute(<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>)) / math.sqrt(<span class="variable language_">self</span>.head_dim)  <span class="comment"># (N,H,T,T)</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> attn_mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            energy.masked_fill_(attn_mask == <span class="number">0</span>, -math.inf)</span><br><span class="line">        attention = torch.softmax(energy, dim=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">        attention = <span class="variable language_">self</span>.attn_drop(attention)</span><br><span class="line">        output = torch.matmul(attention, V)  <span class="comment"># (N,H,T,E/H)</span></span><br><span class="line">        output = output.permute(<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>).contiguous()  <span class="comment"># (N,T,H,E/H)</span></span><br><span class="line">        output = output.reshape((N, S, <span class="variable language_">self</span>.emd_dim))</span><br><span class="line">        output = <span class="variable language_">self</span>.proj(output)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、组装transformer-py文件"><a href="#3、组装transformer-py文件" class="headerlink" title="3、组装transformer.py文件"></a>3、组装transformer.py文件</h3><p>在文件cs231n&#x2F;classifiers&#x2F;transformer.py 中组装函数 CaptioningTransformer类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> ..transformer_layers <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CaptioningTransformer</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, word_to_idx, input_dim, wordvec_dim, num_heads=<span class="number">4</span>,</span></span><br><span class="line"><span class="params">                 num_layers=<span class="number">2</span>, max_length=<span class="number">50</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        vocab_size = <span class="built_in">len</span>(word_to_idx)</span><br><span class="line">        <span class="variable language_">self</span>.vocab_size = vocab_size</span><br><span class="line">        <span class="variable language_">self</span>._null = word_to_idx[<span class="string">&quot;&lt;NULL&gt;&quot;</span>]</span><br><span class="line">        <span class="variable language_">self</span>._start = word_to_idx.get(<span class="string">&quot;&lt;START&gt;&quot;</span>, <span class="literal">None</span>)</span><br><span class="line">        <span class="variable language_">self</span>._end = word_to_idx.get(<span class="string">&quot;&lt;END&gt;&quot;</span>, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.visual_projection = nn.Linear(input_dim, wordvec_dim)</span><br><span class="line">        <span class="variable language_">self</span>.embedding = nn.Embedding(vocab_size, wordvec_dim, padding_idx=<span class="variable language_">self</span>._null)</span><br><span class="line">        <span class="variable language_">self</span>.positional_encoding = PositionalEncoding(wordvec_dim, max_len=max_length)</span><br><span class="line"></span><br><span class="line">        decoder_layer = TransformerDecoderLayer(input_dim=wordvec_dim, num_heads=num_heads)</span><br><span class="line">        <span class="variable language_">self</span>.transformer = TransformerDecoder(decoder_layer, num_layers=num_layers)</span><br><span class="line">        <span class="variable language_">self</span>.apply(<span class="variable language_">self</span>._init_weights)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.output = nn.Linear(wordvec_dim, vocab_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_init_weights</span>(<span class="params">self, module</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Initialize the weights of the network.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, (nn.Linear, nn.Embedding)):</span><br><span class="line">            module.weight.data.normal_(mean=<span class="number">0.0</span>, std=<span class="number">0.02</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, nn.Linear) <span class="keyword">and</span> module.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                module.bias.data.zero_()</span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">isinstance</span>(module, nn.LayerNorm):</span><br><span class="line">            module.bias.data.zero_()</span><br><span class="line">            module.weight.data.fill_(<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, features, captions</span>):</span><br><span class="line"></span><br><span class="line">        N, T = captions.shape</span><br><span class="line">        <span class="comment"># Create a placeholder, to be overwritten by your code below.</span></span><br><span class="line">        scores = torch.empty((N, T, <span class="variable language_">self</span>.vocab_size))</span><br><span class="line"></span><br><span class="line">        caption_embed = <span class="variable language_">self</span>.positional_encoding(<span class="variable language_">self</span>.embedding(captions))</span><br><span class="line">        img_vec = <span class="variable language_">self</span>.visual_projection(features)</span><br><span class="line"></span><br><span class="line">        mask = torch.ones((T, T), dtype=<span class="built_in">bool</span>)</span><br><span class="line">        mask = torch.tril(mask)</span><br><span class="line"></span><br><span class="line">        img_vec = torch.unsqueeze(img_vec, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        output = <span class="variable language_">self</span>.transformer(caption_embed, img_vec, mask)</span><br><span class="line">        scores = <span class="variable language_">self</span>.output(output)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> scores</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sample</span>(<span class="params">self, features, max_length=<span class="number">30</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            features = torch.Tensor(features)</span><br><span class="line">            N = features.shape[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create an empty captions tensor (where all tokens are NULL).</span></span><br><span class="line">            captions = <span class="variable language_">self</span>._null * np.ones((N, max_length), dtype=np.int32)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create a partial caption, with only the start token.</span></span><br><span class="line">            partial_caption = <span class="variable language_">self</span>._start * np.ones(N, dtype=np.int32)</span><br><span class="line">            partial_caption = torch.LongTensor(partial_caption)</span><br><span class="line">            <span class="comment"># [N] -&gt; [N, 1]</span></span><br><span class="line">            partial_caption = partial_caption.unsqueeze(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(max_length):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># Predict the next token (ignoring all other time steps).</span></span><br><span class="line">                output_logits = <span class="variable language_">self</span>.forward(features, partial_caption)</span><br><span class="line">                output_logits = output_logits[:, -<span class="number">1</span>, :]</span><br><span class="line"></span><br><span class="line">                <span class="comment"># Choose the most likely word ID from the vocabulary.</span></span><br><span class="line">                <span class="comment"># [N, V] -&gt; [N]</span></span><br><span class="line">                word = torch.argmax(output_logits, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># Update our overall caption and our current partial caption.</span></span><br><span class="line">                captions[:, t] = word.numpy()</span><br><span class="line">                word = word.unsqueeze(<span class="number">1</span>)</span><br><span class="line">                partial_caption = torch.cat([partial_caption, word], dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> captions</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TransformerDecoderLayer</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    A single layer of a Transformer decoder, to be used with TransformerDecoder.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_dim, num_heads, dim_feedforward=<span class="number">2048</span>, dropout=<span class="number">0.1</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.self_attn = MultiHeadAttention(input_dim, num_heads, dropout)</span><br><span class="line">        <span class="variable language_">self</span>.multihead_attn = MultiHeadAttention(input_dim, num_heads, dropout)</span><br><span class="line">        <span class="variable language_">self</span>.linear1 = nn.Linear(input_dim, dim_feedforward)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout)</span><br><span class="line">        <span class="variable language_">self</span>.linear2 = nn.Linear(dim_feedforward, input_dim)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.norm1 = nn.LayerNorm(input_dim)</span><br><span class="line">        <span class="variable language_">self</span>.norm2 = nn.LayerNorm(input_dim)</span><br><span class="line">        <span class="variable language_">self</span>.norm3 = nn.LayerNorm(input_dim)</span><br><span class="line">        <span class="variable language_">self</span>.dropout1 = nn.Dropout(dropout)</span><br><span class="line">        <span class="variable language_">self</span>.dropout2 = nn.Dropout(dropout)</span><br><span class="line">        <span class="variable language_">self</span>.dropout3 = nn.Dropout(dropout)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.activation = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, tgt, memory, tgt_mask=<span class="literal">None</span></span>):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Perform self-attention on the target sequence (along with dropout and</span></span><br><span class="line">        <span class="comment"># layer norm).</span></span><br><span class="line">        tgt2 = <span class="variable language_">self</span>.self_attn(query=tgt, key=tgt, value=tgt, attn_mask=tgt_mask)</span><br><span class="line">        tgt = tgt + <span class="variable language_">self</span>.dropout1(tgt2)</span><br><span class="line">        tgt = <span class="variable language_">self</span>.norm1(tgt)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Attend to both the target sequence and the sequence from the last</span></span><br><span class="line">        <span class="comment"># encoder layer.</span></span><br><span class="line">        tgt2 = <span class="variable language_">self</span>.multihead_attn(query=tgt, key=memory, value=memory)</span><br><span class="line">        tgt = tgt + <span class="variable language_">self</span>.dropout2(tgt2)</span><br><span class="line">        tgt = <span class="variable language_">self</span>.norm2(tgt)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Pass</span></span><br><span class="line">        tgt2 = <span class="variable language_">self</span>.linear2(<span class="variable language_">self</span>.dropout(<span class="variable language_">self</span>.activation(<span class="variable language_">self</span>.linear1(tgt))))</span><br><span class="line">        tgt = tgt + <span class="variable language_">self</span>.dropout3(tgt2)</span><br><span class="line">        tgt = <span class="variable language_">self</span>.norm3(tgt)</span><br><span class="line">        <span class="keyword">return</span> tgt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clones</span>(<span class="params">module, N</span>):</span><br><span class="line">    <span class="string">&quot;Produce N identical layers.&quot;</span></span><br><span class="line">    <span class="keyword">return</span> nn.ModuleList([copy.deepcopy(module) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(N)])</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TransformerDecoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, decoder_layer, num_layers</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.layers = clones(decoder_layer, num_layers)</span><br><span class="line">        <span class="variable language_">self</span>.num_layers = num_layers</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, tgt, memory, tgt_mask=<span class="literal">None</span></span>):</span><br><span class="line">        output = tgt</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> mod <span class="keyword">in</span> <span class="variable language_">self</span>.layers:</span><br><span class="line">            output = mod(output, memory, tgt_mask=tgt_mask)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、模型训练captioning-solver-transformer-py文件"><a href="#4、模型训练captioning-solver-transformer-py文件" class="headerlink" title="4、模型训练captioning_solver_transformer.py文件"></a>4、模型训练captioning_solver_transformer.py文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> optim</span><br><span class="line"><span class="keyword">from</span> .coco_utils <span class="keyword">import</span> sample_coco_minibatch, decode_captions</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CaptioningSolverTransformer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model, data, idx_to_word, **kwargs</span>):</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.model = model</span><br><span class="line">        <span class="variable language_">self</span>.data = data</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Unpack keyword arguments</span></span><br><span class="line">        <span class="variable language_">self</span>.learning_rate = kwargs.pop(<span class="string">&quot;learning_rate&quot;</span>, <span class="number">0.001</span>)</span><br><span class="line">        <span class="variable language_">self</span>.batch_size = kwargs.pop(<span class="string">&quot;batch_size&quot;</span>, <span class="number">100</span>)</span><br><span class="line">        <span class="variable language_">self</span>.num_epochs = kwargs.pop(<span class="string">&quot;num_epochs&quot;</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.print_every = kwargs.pop(<span class="string">&quot;print_every&quot;</span>, <span class="number">10</span>)</span><br><span class="line">        <span class="variable language_">self</span>.verbose = kwargs.pop(<span class="string">&quot;verbose&quot;</span>, <span class="literal">True</span>)</span><br><span class="line">        <span class="variable language_">self</span>.optim = torch.optim.Adam(<span class="variable language_">self</span>.model.parameters(), <span class="variable language_">self</span>.learning_rate)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Throw an error if there are extra keyword arguments</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(kwargs) &gt; <span class="number">0</span>:</span><br><span class="line">            extra = <span class="string">&quot;, &quot;</span>.join(<span class="string">&#x27;&quot;%s&quot;&#x27;</span> % k <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">list</span>(kwargs.keys()))</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Unrecognized arguments %s&quot;</span> % extra)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>._reset()</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.idx_to_word = idx_to_word</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_reset</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Set up some book-keeping variables for optimization. Don&#x27;t call this</span></span><br><span class="line"><span class="string">        manually.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># Set up some variables for book-keeping</span></span><br><span class="line">        <span class="variable language_">self</span>.epoch = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.loss_history = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_step</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Make a minibatch of training data</span></span><br><span class="line">        minibatch = sample_coco_minibatch(</span><br><span class="line">            <span class="variable language_">self</span>.data, batch_size=<span class="variable language_">self</span>.batch_size, split=<span class="string">&quot;train&quot;</span></span><br><span class="line">        )</span><br><span class="line">        captions, features, urls = minibatch</span><br><span class="line"></span><br><span class="line">        captions_in = captions[:, :-<span class="number">1</span>]</span><br><span class="line">        captions_out = captions[:, <span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">        mask = captions_out != <span class="variable language_">self</span>.model._null</span><br><span class="line"></span><br><span class="line">        t_features = torch.Tensor(features)</span><br><span class="line">        t_captions_in = torch.LongTensor(captions_in)</span><br><span class="line">        t_captions_out = torch.LongTensor(captions_out)</span><br><span class="line">        t_mask = torch.LongTensor(mask)</span><br><span class="line">        logits = <span class="variable language_">self</span>.model(t_features, t_captions_in)</span><br><span class="line"></span><br><span class="line">        loss = <span class="variable language_">self</span>.transformer_temporal_softmax_loss(logits, t_captions_out, t_mask)</span><br><span class="line">        <span class="variable language_">self</span>.loss_history.append(loss.detach().numpy())</span><br><span class="line">        <span class="variable language_">self</span>.optim.zero_grad()</span><br><span class="line">        loss.backward()</span><br><span class="line">        <span class="variable language_">self</span>.optim.step()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Run optimization to train the model.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        num_train = <span class="variable language_">self</span>.data[<span class="string">&quot;train_captions&quot;</span>].shape[<span class="number">0</span>]</span><br><span class="line">        iterations_per_epoch = <span class="built_in">max</span>(num_train // <span class="variable language_">self</span>.batch_size, <span class="number">1</span>)</span><br><span class="line">        num_iterations = <span class="variable language_">self</span>.num_epochs * iterations_per_epoch</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(num_iterations):</span><br><span class="line">            <span class="variable language_">self</span>._step()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Maybe print training loss</span></span><br><span class="line">            <span class="keyword">if</span> <span class="variable language_">self</span>.verbose <span class="keyword">and</span> t % <span class="variable language_">self</span>.print_every == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(</span><br><span class="line">                    <span class="string">&quot;(Iteration %d / %d) loss: %f&quot;</span></span><br><span class="line">                    % (t + <span class="number">1</span>, num_iterations, <span class="variable language_">self</span>.loss_history[-<span class="number">1</span>])</span><br><span class="line">                )</span><br><span class="line"></span><br><span class="line">            <span class="comment"># At the end of every epoch, increment the epoch counter.</span></span><br><span class="line">            epoch_end = (t + <span class="number">1</span>) % iterations_per_epoch == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">transformer_temporal_softmax_loss</span>(<span class="params">self, x, y, mask</span>):</span><br><span class="line"></span><br><span class="line">        N, T, V = x.shape</span><br><span class="line"></span><br><span class="line">        x_flat = x.reshape(N * T, V)</span><br><span class="line">        y_flat = y.reshape(N * T)</span><br><span class="line">        mask_flat = mask.reshape(N * T)</span><br><span class="line"></span><br><span class="line">        loss = torch.nn.functional.cross_entropy(x_flat,  y_flat, reduction=<span class="string">&#x27;none&#x27;</span>)</span><br><span class="line">        loss = torch.mul(loss, mask_flat)</span><br><span class="line">        loss = torch.mean(loss)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5、主程序（二）模型训练和sample验证"><a href="#5、主程序（二）模型训练和sample验证" class="headerlink" title="5、主程序（二）模型训练和sample验证"></a>5、主程序（二）模型训练和sample验证</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Setup cell.##########————————————————Overfit Transformer Captioning Model on Small Data——————————————————————########</span></span><br><span class="line">torch.manual_seed(<span class="number">231</span>)</span><br><span class="line">np.random.seed(<span class="number">231</span>)</span><br><span class="line"></span><br><span class="line">data = load_coco_data(max_train=<span class="number">50</span>)</span><br><span class="line"></span><br><span class="line">transformer = CaptioningTransformer(</span><br><span class="line">          word_to_idx=data[<span class="string">&#x27;word_to_idx&#x27;</span>],</span><br><span class="line">          input_dim=data[<span class="string">&#x27;train_features&#x27;</span>].shape[<span class="number">1</span>],</span><br><span class="line">          wordvec_dim=<span class="number">256</span>,</span><br><span class="line">          num_heads=<span class="number">2</span>,</span><br><span class="line">          num_layers=<span class="number">2</span>,</span><br><span class="line">          max_length=<span class="number">30</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">transformer_solver = CaptioningSolverTransformer(transformer, data, idx_to_word=data[<span class="string">&#x27;idx_to_word&#x27;</span>],</span><br><span class="line">           num_epochs=<span class="number">100</span>,</span><br><span class="line">           batch_size=<span class="number">25</span>,</span><br><span class="line">           learning_rate=<span class="number">0.001</span>,</span><br><span class="line">           verbose=<span class="literal">True</span>, print_every=<span class="number">10</span>,</span><br><span class="line">         )</span><br><span class="line"></span><br><span class="line">transformer_solver.train()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot the training losses.</span></span><br><span class="line">plt.plot(transformer_solver.loss_history)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Iteration&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Loss&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Training loss history&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Final loss: &#x27;</span>, transformer_solver.loss_history[-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup cell.##########————————————————完成  PositionalEncoding 类——————————————————————########</span></span><br><span class="line"><span class="comment"># If you get an error, the URL just no longer exists, so don&#x27;t worry!</span></span><br><span class="line"><span class="comment"># You can re-sample as many times as you want.</span></span><br><span class="line"><span class="keyword">for</span> split <span class="keyword">in</span> [<span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;val&#x27;</span>]:</span><br><span class="line">    minibatch = sample_coco_minibatch(data, split=split, batch_size=<span class="number">2</span>)</span><br><span class="line">    gt_captions, features, urls = minibatch</span><br><span class="line">    gt_captions = decode_captions(gt_captions, data[<span class="string">&#x27;idx_to_word&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    sample_captions = transformer.sample(features, max_length=<span class="number">30</span>)</span><br><span class="line">    sample_captions = decode_captions(sample_captions, data[<span class="string">&#x27;idx_to_word&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> gt_caption, sample_caption, url <span class="keyword">in</span> <span class="built_in">zip</span>(gt_captions, sample_captions, urls):</span><br><span class="line">        img = image_from_url(url)</span><br><span class="line">        <span class="comment"># Skip missing URLs.</span></span><br><span class="line">        <span class="keyword">if</span> img <span class="keyword">is</span> <span class="literal">None</span>: <span class="keyword">continue</span></span><br><span class="line">        plt.imshow(img)</span><br><span class="line">        plt.title(<span class="string">&#x27;%s\\n%s\\nGT:%s&#x27;</span> % (split, sample_caption, gt_caption))</span><br><span class="line">        plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">        plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0DL-Transformer-%E5%8E%9F%E7%90%86%E6%95%99%E7%A8%8B/">http://example.com/2025/06/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0DL-Transformer-%E5%8E%9F%E7%90%86%E6%95%99%E7%A8%8B/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0DL/"># 深度学习DL</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0DL-computational-graphs%E8%AE%A1%E7%AE%97%E5%9B%BE-%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99-%E6%A2%AF%E5%BA%A6%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/">[深度学习DL]computational graphs计算图-链式法则-梯度反向传播</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0DL-RNN-%E5%8E%9F%E7%90%86%E6%95%99%E7%A8%8B/">[深度学习DL]RNN-原理教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
