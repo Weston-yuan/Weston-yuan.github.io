@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[code]MATLAB教程 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[code]MATLAB教程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;12:50:49</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h3><ul>
+<li>MATLAB是m语言的IDE编译器</li>
+<li>文件格式 .m</li>
+<li>推荐采用实时脚本编写脚本，用命令行debug</li>
+</ul>
+<p><strong>基本语法（命令）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">%注释</span><br><span class="line">%变量名区分大小写，推荐驼峰命名法</span><br><span class="line">%look for 找函数</span><br><span class="line">%help 函数名</span><br><span class="line">%whos</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>数据类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">%matlab是弱语言，不需强制定义数据类型，编译器每次执行前推导</span><br><span class="line">1、数值阵列（类型）：</span><br><span class="line">整形(int8/uint8/int16/uint16)</span><br><span class="line">浮点型（single / double）</span><br><span class="line">2、字符阵列：字符、字符串</span><br><span class="line">3、胞体/元祖阵列（重点）</span><br><span class="line">4、结构体阵列</span><br><span class="line">5、逻辑阵列（布尔类型）</span><br><span class="line">6、函数句柄阵列</span><br><span class="line"></span><br><span class="line">*其他：Inf 正无穷、-Inf 负无穷、NaN 非数值量</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>函数</p>
+<p>输入函数：disp &#x2F; input</p>
+<p>取整函数：floor &#x2F; ceil &#x2F; round &#x2F; fix</p>
+<p>ga算法：实时脚本——任务task——优化optimize——GA</p>
+<h3 id="三、MATLAB连接数据库MySQL"><a href="#三、MATLAB连接数据库MySQL" class="headerlink" title="三、MATLAB连接数据库MySQL"></a>三、MATLAB连接数据库MySQL</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn=database(<span class="string">&#x27;dbname&#x27;</span>,<span class="string">&#x27;username&#x27;</span>,<span class="string">&#x27;password&#x27;</span>,<span class="string">&#x27;com.mysql.jdbc.Driver&#x27;</span>,<span class="string">&#x27;jdbc:mysql ://localhost:3306/dbname&#x27;</span>);</span><br><span class="line">book_answer=exec(conn ,[<span class="string">&#x27;select BARCODE,TITLE,CREATOR,CALLNUMBER from tablename where CASENO =&#x27;&#x27;&#x27;</span>,caseno,<span class="string">&#x27;&#x27;&#x27;&#x27;</span>]) ;</span><br><span class="line">book_answer=fetch(book_answer); book_Data=book_answer.Data; close(book_answer); close(conn);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先，我们必须获取数据库的服务地址和端口号。(本例中是 localhost 和3306); 其次，我们必须获取登录数据库的用户名username和密码password; 数据库的名字 dbname，和此数据库中的表名tablename;<br>要注意的是:执行 数据库处理语句时，由于整个执行语句被‘ ’单引号括起来，若 语句中含有变量(本例中是caseno)则需要用多个‘单引号; 关闭链接close(conn)是个好习惯;</p>
+<h3 id="四、MATLAB深度学习tool"><a href="#四、MATLAB深度学习tool" class="headerlink" title="四、MATLAB深度学习tool"></a>四、MATLAB深度学习tool</h3><p>参考教程：</p>
+<p>mat官<a target="_blank" rel="noopener" href="https://ww2.mathworks.cn/help/deeplearning/ug/word-by-word-text-generation-using-deep-learning.html?lang=en">方WordByWord生成</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SFwCWN_u-kI">YouTube教程</a></p>
+<p>这里训练能否启动与数据集有关，官方示例文本data竟然跑不通！</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 加载训练数据html</span></span><br><span class="line"><span class="comment">% url = &quot;&lt;http://jhsjk.people.cn/article/32296476&gt;&quot;;</span></span><br><span class="line"><span class="comment">%%% 竟然和数据源有关系？？？官方的文本数据示例链接竟然跑不通？？？？</span></span><br><span class="line">url = <span class="string">&quot;&lt;https://www.gutenberg.org/files/1184/1184-h/1184-h.htm&gt;&quot;</span>;</span><br><span class="line">code = webread(url);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 解析 HTML 代码</span></span><br><span class="line"><span class="comment">% 使用 htmlTree 解析 HTML 代码，然后找到元素名为 &quot;p&quot; 的所有元素，来提取相关文本。</span></span><br><span class="line">tree = htmlTree(code);</span><br><span class="line">selector = <span class="string">&quot;p&quot;</span>;</span><br><span class="line">subtrees = findElement(tree,selector);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 使用 extractHTMLText 从 HTML 子树中提取文本数据，并查看前 10 段。</span></span><br><span class="line">textData = extractHTMLText(subtrees);</span><br><span class="line">textData(<span class="number">1</span>:<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">% 删除空段落并查看更新后的前 10 个段落。</span></span><br><span class="line">textData(textData == <span class="string">&quot;&quot;</span>) = [];</span><br><span class="line">textData(<span class="number">1</span>:<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">%用文字云可视化文本数据</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">wordcloud(textData);</span><br><span class="line">title(<span class="string">&quot;Alice&#x27;s Adventures in Wonderland&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">%%%准备要训练的数据</span></span><br><span class="line"><span class="comment">% 使用 tokenizedDocument 对文本数据进行分词。</span></span><br><span class="line">documents = tokenizedDocument(textData);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 自定义小批量数据存储——使用分词后的文档创建文档生成数据存储。</span></span><br><span class="line"><span class="comment">%% 此步要将 documentGenerationDatastore.m 保存到路径。</span></span><br><span class="line">ds = documentGenerationDatastore(documents);</span><br><span class="line"><span class="comment">% 按序列长度对数据存储中的文档进行排序。</span></span><br><span class="line">ds = <span class="built_in">sort</span>(ds);</span><br><span class="line"></span><br><span class="line"><span class="comment">%%% 创建和训练 LSTM 网络</span></span><br><span class="line">inputSize = <span class="number">1</span>;</span><br><span class="line">embeddingDimension = <span class="number">100</span>;</span><br><span class="line">numWords = <span class="built_in">numel</span>(ds.Encoding.Vocabulary);</span><br><span class="line">numClasses = numWords + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% layers为网络的架构，也就是指网络每层的处理模式。</span></span><br><span class="line">layers = [</span><br><span class="line">   sequenceInputLayer(inputSize) <span class="comment">%输入层</span></span><br><span class="line">   wordEmbeddingLayer(embeddingDimension,numWords)</span><br><span class="line">   lstmLayer(<span class="number">100</span>)</span><br><span class="line">   dropoutLayer(<span class="number">0.2</span>)</span><br><span class="line">   fullyConnectedLayer(numClasses) <span class="comment">%全连接层</span></span><br><span class="line">   softmaxLayer</span><br><span class="line">   classificationLayer]; <span class="comment">%分类层</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%options为超参数的设置，包括学习率，优化方法，迭代次数以及批量大小问题等。</span></span><br><span class="line"><span class="comment">%% 指定训练选项。指定求解器为 &#x27;adam&#x27;。进行 300 轮训练，学习率为 0.01。将小批量大小设置为 32。要保持数据按序列长度排序，请将 &#x27;Shuffle&#x27; 选项设置为 &#x27;never&#x27;。要监控训练进度，请将 &#x27;Plots&#x27; 选项设置为 &#x27;training-progress&#x27;。要隐藏详细输出，请将 &#x27;Verbose&#x27; 设置为 false。</span></span><br><span class="line">options = trainingOptions(<span class="string">&#x27;adam&#x27;</span>, ...</span><br><span class="line">   <span class="string">&#x27;MaxEpochs&#x27;</span>,<span class="number">300</span>, ...</span><br><span class="line">   <span class="string">&#x27;InitialLearnRate&#x27;</span>,<span class="number">0.01</span>, ...</span><br><span class="line">   <span class="string">&#x27;MiniBatchSize&#x27;</span>,<span class="number">32</span>, ...</span><br><span class="line">   <span class="string">&#x27;Shuffle&#x27;</span>,<span class="string">&#x27;never&#x27;</span>, ...</span><br><span class="line">   <span class="string">&#x27;Plots&#x27;</span>,<span class="string">&#x27;training-progress&#x27;</span>, ...</span><br><span class="line">   <span class="string">&#x27;Verbose&#x27;</span>,<span class="built_in">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 使用 trainNetwork 训练网络。</span></span><br><span class="line"><span class="comment">%% 这里数据集较小的话，不够神经网络的深度，会报错！！！</span></span><br><span class="line"><span class="comment">% 这里ds为小批量数据，在这里卡了很久了，报错：无效的训练数据！！！</span></span><br><span class="line">net = trainNetwork(ds,layers,options);</span><br><span class="line"><span class="comment">%%% 以上训练过程对Mac来说太漫长，需较高规格的硬件GPU训练</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/code-MATLAB%E6%95%99%E7%A8%8B/">http://example.com/2025/06/26/code-MATLAB%E6%95%99%E7%A8%8B/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/code/"># code</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/code-MySQL%E6%95%99%E7%A8%8B/">[code]MySQL教程</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/code-HuggingFace%E6%95%99%E7%A8%8B/">[code]HuggingFace教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

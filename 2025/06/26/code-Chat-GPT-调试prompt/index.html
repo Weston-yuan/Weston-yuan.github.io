@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[code]Chat GPT 调试prompt | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[code]Chat GPT 调试prompt</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;12:44:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><p>1、openAI 登录谷歌账号。<br>2、openAI开发者 —— playground —— try chatgpt</p>
+<p>3、Merlin</p>
+<p>4、Bard<a target="_blank" rel="noopener" href="https://bard.google.com/?hl=en">谷歌GPT</a></p>
+<h1 id="二、钩子"><a href="#二、钩子" class="headerlink" title="二、钩子"></a>二、钩子</h1><h3 id="1、英文润色："><a href="#1、英文润色：" class="headerlink" title="1、英文润色："></a>1、英文润色：</h3><p>（1）简单改写：</p>
+<p>Rewrite and expand on the passage in the style of a college-educated native English speaker. Use simple syntax and idiomatic expressions.</p>
+<p>（2）用复杂的句法和词汇改写：</p>
+<p>Rewrite and expand on the passage in the style of an established scholar. Use complex syntax and advanced vocabulary. Make sure the new version is significantly different from the original.</p>
+<p>（3）用某某作家&#x2F;教授的风格改写：</p>
+<p>Rewrite the passage in the style of Steven Pinker.</p>
+<h3 id="2、英文成套润色："><a href="#2、英文成套润色：" class="headerlink" title="2、英文成套润色："></a>2、英文成套润色：</h3><p>Below is a paragraph from an academic paper. Polish the writing to meet the academic style, improve the spelling, grammer, clasity and overall readability. When necessary, rewrite the whole sentence. Furthermore, list all modification and explian the reasons to do so in markdown table.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Below <span class="keyword">is</span> a paragraph <span class="keyword">from</span> an academic paper. Polish the writing to meet the academic style, improve the spelling, grammer, clasity <span class="keyword">and</span> overall readability. When necessary, rewrite the whole sentence. Furthermore, <span class="built_in">list</span> <span class="built_in">all</span> modification <span class="keyword">and</span> explian the reasons to do so <span class="keyword">in</span> markdown table.</span><br><span class="line">&#123;</span><br><span class="line">   text</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、中英互译："><a href="#3、中英互译：" class="headerlink" title="3、中英互译："></a>3、中英互译：</h3><p>I want you to act as a scientific English-Chinese translator, I will provide you with some paragraphs in one language and your task is to accurately and academically translate the paragraphs only into the other language. Do not repeat the original provided paragraphs after translation. If needed, please improve the text in a scientific tone. I want you to give your output in a markdown table where the first column is the original language and the second is the sentence after translating, and give each row only one sentence. Please provide the whole text after translation in the end:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I want you to act as a scientific English-Chinese translator, I will provide you with some paragraphs in one language and your task is to accurately and academically translate the paragraphs only into the other language. Do not repeat the original provided paragraphs after translation. If needed, please improve the text in a scientific tone. I want you to give your output in a markdown table where the first column is the original language and the second is the sentence after translating, and give each row only one sentence. Please provide the whole text after translation in the end:</span><br><span class="line">&#123; &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、英文仿写-洗稿"><a href="#4、英文仿写-洗稿" class="headerlink" title="4、英文仿写&#x2F;洗稿"></a>4、英文仿写&#x2F;洗稿</h3><p>Now you are a academic writer, below is a example for reference, you can learn the writing style, spelling, grammer, and readability from it</p>
+<p>Then, imitate the style of the paragraph above, complete this text below</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Now you are a academic writer, below is a example for reference, you can learn the writing style, spelling, grammer, and readability from it</span><br><span class="line">&#123;********</span><br><span class="line">First, data are generated and cleaned by specifying the pertinent context characteristics (feature extraction), completing the lost data, confirming context, and eliminating abnormal to enhance data quality. The format of the data is also standardized, and common data formats are used, such as tagged encoding, key-value, graphical, object-based, logical, ontology-based, and hybrid formats. The second stage is storing data by organizing the database structure.  Cloud databases are becoming popular because many terminal devices have concurrent access to a database, which typically include relational (e.g., MySQL, Oracle, Postgre SQL), non-relational (e.g., Mongo DB, Redis), and graph (e.g., Neo4J, InfoGrid) databases. Finally, the third stage is data analysis which involves carefully reviewing and summing up the data to draw important insights and make decisions. The data analysis draws out the implicit information of seemingly unorganized data to find the interrelations. Commonly used data analysis methods are statistical analysis (e.g., variance and correlation analyses), unsupervised algorithm (e.g., principal component and cluster analyses), and data visualization (e.g., BI, Neo4J) methods.</span><br><span class="line">********&#125;</span><br><span class="line">Then, imitate the style of the paragraph above, complete this text below</span><br><span class="line">&#123;********</span><br><span class="line">Healthcare data emanates from four primary sources: physiological signals, cognitive signals, medical records, and medical images. Based on the healthcare data acquired, data processing.</span><br><span class="line">First, data clean.</span><br><span class="line">Then, data storage.</span><br><span class="line">third, data analysis.</span><br><span class="line">********&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5、Spellcheck-Grammar-check"><a href="#5、Spellcheck-Grammar-check" class="headerlink" title="5、Spellcheck&#x2F;Grammar check"></a>5、Spellcheck&#x2F;Grammar check</h3><p>显示原文与修改的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">text = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Got this for my daughter for her birthday cuz she keeps taking \\</span></span><br><span class="line"><span class="string">mine from my room.  Yes, adults also like pandas too.  She takes \\</span></span><br><span class="line"><span class="string">it everywhere with her, and it&#x27;s super soft and cute.  One of the \\</span></span><br><span class="line"><span class="string">ears is a bit lower than the other, and I don&#x27;t think that was \\</span></span><br><span class="line"><span class="string">designed to be asymmetrical. It&#x27;s a bit small for what I paid for it \\</span></span><br><span class="line"><span class="string">though. I think there might be other options that are bigger for \\</span></span><br><span class="line"><span class="string">the same price.  It arrived a day earlier than expected, so I got \\</span></span><br><span class="line"><span class="string">to play with it myself before I gave it to my daughter.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">prompt = <span class="string">f&quot;proofread and correct this review: ```<span class="subst">&#123;text&#125;</span>```&quot;</span></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> redlines <span class="keyword">import</span> Redlines</span><br><span class="line">diff = Redlines(text,response)</span><br><span class="line">display(Markdown(diff.output_markdown))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="三、Andrew-ng教程prompt"><a href="#三、Andrew-ng教程prompt" class="headerlink" title="三、Andrew ng教程prompt"></a>三、Andrew ng教程prompt</h1><table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Tactic</th>
+<th>Example prompt</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Principle-1<br>Write clear and specific instruction</td>
+<td>Tactic1:<br>Use delimiters分隔符, 分隔符可以是任何一种:<br>Triplequotes: &quot;&quot;&quot;<br>Triple backticks: `\<code>\</code><br>Triple dashes: ---<br>Angle brackets: &lt; &gt;<br>XML tags:&lt;tag&gt;&lt;&#x2F;tag&gt;<br></td>
+<td>Summarize the text delimited by triple backticks into a single sentence.<br>  `\<code>\</code>{text}\<code>\</code>\&#96;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Tactic 2: <br>Ask for a structured output<br>- JSON, HTML</td>
+<td>Generate a list of three made-up book titles along with their authors and genres. <br>Provide them in JSON format with the following keys: <br> book_id, title, author, genre.</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Tactic 3: <br>Ask the model to check whether conditions are satisfied</td>
+<td>You will be provided with text delimited by triple quotes. If it contains a sequence of instructions, re-write those instructions in the following format:<br>Step 1 - …<br>Step 2 - …<br>…<br>Step N - …<br>If the text does not contain a sequence of instructions, then simply write &quot;No steps provided.<br>&quot;&quot;&quot;{text_1}&quot;&quot;&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Tactic 4: <br>“Few-shot” prompting</td>
+<td>Your task is to answer in a consistent style.<br>&lt;child&gt;: Teach me about patience.<br> &lt;grandparent&gt;: The river that carves the deepest valley flows from a modest spring; the grandest symphony originates from a single note; the most intricate tapestry begins with a solitary thread.<br>&lt;child&gt;: Teach me about resilience.</td>
+<td></td>
+</tr>
+<tr>
+<td>Principle-2: <br>Give the model time to “think”</td>
+<td>Tactic 1: <br>Specify the steps required to complete a task</td>
+<td>Perform the following actions:<br>1 - Summarize the following text delimited by triple backticks with 1 sentence.<br>2 - Translate the summary into French.<br>3 - List each name in the French summary.<br>4 - Output a json object that contains the following keys: french_summary, num_names.<br>Separate your answers with line breaks.<br>Text:<br> `\<code>\</code>{text}\<code>\</code>\&#96;</td>
+<td>Your task is to perform the following actions:<br>1 - Summarize the following text delimited by &lt;&gt; with 1 sentence.<br>2 - Translate the summary into French.<br>3 - List each name in the French summary.<br>4 - Output a json object that contains the following keys:<br> french_summary, num_names.<br>Use the following format:<br>Text: &lt;text to summarize&gt;<br>Summary: &lt;summary&gt;<br>Translation: &lt;summary translation&gt;<br>Names: &lt;list of names in Italian summary&gt;<br>Output JSON: &lt;json with summary and num_names&gt;<br>Text: &lt;{text}&gt;</td>
+</tr>
+<tr>
+<td></td>
+<td>Tactic 2:<br>Instruct the model to work out its own solution before rushing to a conclusion</td>
+<td>Determine if the student’s solution is correct or not.<br>Question:<br>I’m building a solar power installation and I need help working out the financials.<br>- Land costs $100 &#x2F; square foot<br>- I can buy solar panels for $250 &#x2F; square foot<br>- I negotiated a contract for maintenance that will cost me a flat $100k per year, and an additional $10 &#x2F; square foot<br>What is the total cost for the first year of operations as a function of the number of square feet.<br>Student’s Solution:<br>Let x be the size of the installation in square feet.<br>Costs:<br>1. Land cost: 100x<br>2. Solar panel cost: 250x<br>3. Maintenance cost: 100,000 + 100x<br>Total cost: 100x + 250x + 100,000 + 100x &#x3D; 450x + 100,000<br></td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id="三、注册方式及共享账号"><a href="#三、注册方式及共享账号" class="headerlink" title="三、注册方式及共享账号"></a>三、注册方式及共享账号</h1><p>1、邮箱注册，验证地址</p>
+<p>2、境外手机号注册</p>
+<p><a target="_blank" rel="noopener" href="https://sms-activate.org/">https://sms-activate.org/</a></p>
+<p>3、openAI 共享账号</p>
+<p><a href="mailto:&#x37;&#53;&#56;&#53;&#x34;&#54;&#50;&#57;&#56;&#64;&#113;&#113;&#46;&#x63;&#111;&#x6d;">758546298@qq.com</a>【！Wk19950513】</p>
+<p><a href="mailto:&#x73;&#104;&#121;&#101;&#121;&#x75;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">shyeyuan@gmail.com</a>【Ayepe1017】</p>
+<p><a href="mailto:&#x4d;&#x6f;&#116;&#x74;&#x69;&#x66;&#101;&#x72;&#95;&#x56;&#101;&#x63;&#x74;&#111;&#114;&#64;&#x31;&#54;&#51;&#46;&#x63;&#x6f;&#109;">Mottifer_Vector@163.com</a>【mao20010830】</p>
+<p><a href="mailto:&#121;&#111;&#x79;&#x6f;&#115;&#x65;&#x74;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;">yoyoset@gmail.com</a>【!@#Ct198253O!!@#】check</p>
+<p><a href="mailto:&#97;&#117;&#x62;&#x72;&#101;&#x79;&#101;&#64;&#49;&#x32;&#x36;&#46;&#x63;&#x6f;&#x6d;">aubreye@126.com</a>【shicheng15】</p>
+<p><a href="mailto:&#x31;&#x33;&#50;&#x38;&#56;&#x39;&#49;&#48;&#x33;&#48;&#64;&#x71;&#113;&#46;&#x63;&#x6f;&#x6d;">1328891030@qq.com</a>【Mczheng132889】</p>
+<p><a href="mailto:&#122;&#120;&#99;&#122;&#x68;&#101;&#110;&#103;&#x79;&#x69;&#112;&#101;&#110;&#103;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#x6f;&#109;">zxczhengyipeng@126.com</a>【jiaxing1】</p>
+<p><a href="mailto:&#57;&#x37;&#57;&#57;&#x33;&#52;&#x39;&#x39;&#x32;&#64;&#113;&#113;&#x2e;&#99;&#111;&#109;">979934992@qq.com</a>【Zanjiahuge@2】</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/code-Chat-GPT-%E8%B0%83%E8%AF%95prompt/">http://example.com/2025/06/26/code-Chat-GPT-%E8%B0%83%E8%AF%95prompt/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/code/"># code</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/code-Gephi%E6%95%99%E7%A8%8B-%E5%9B%BE-%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90/">[code]Gephi教程-图-网络分析</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/code-CSS%E6%95%99%E7%A8%8B/">[code]CSS教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

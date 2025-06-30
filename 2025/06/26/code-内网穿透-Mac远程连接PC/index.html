@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[code]内网穿透-Mac远程连接PC | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[code]内网穿透-Mac远程连接PC</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;12:59:40</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>原理</p>
+<p>（1）远程桌面：todesk、向日葵、rustdesk；</p>
+<p>（2）局域网、公网IP连接过程：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/162838614">https://zhuanlan.zhihu.com/p/162838614</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57363088">https://zhuanlan.zhihu.com/p/57363088</a></p>
+<h1 id="方案一、win远程桌面-Microsoft-Remote-Desktop-for-MacOS-cpolar内网穿透"><a href="#方案一、win远程桌面-Microsoft-Remote-Desktop-for-MacOS-cpolar内网穿透" class="headerlink" title="方案一、win远程桌面 + Microsoft Remote Desktop for MacOS+cpolar内网穿透"></a>方案一、<strong>win远程桌面 + Microsoft Remote Desktop for MacOS+cpolar内网穿透</strong></h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/163525491">https://zhuanlan.zhihu.com/p/163525491</a></p>
+<p>完整解决方案<a target="_blank" rel="noopener" href="https://www.zhihu.com/zvideo/1632069426886549504">https://www.zhihu.com/zvideo/1632069426886549504</a></p>
+<p>2**-内网穿透**</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/63098230/answer/1989327965">https://www.zhihu.com/question/63098230/answer/1989327965</a></p>
+<p>内网穿透工具：cpolar 【每天得更换PC隧道端口】</p>
+<p><strong>cpolar</strong> { <a href="mailto:&#x77;&#101;&#x73;&#x74;&#x6f;&#110;&#x2d;&#121;&#117;&#97;&#x6e;&#x40;&#x6f;&#117;&#x74;&#x6c;&#x6f;&#x6f;&#107;&#x2e;&#99;&#111;&#x6d;">weston-yuan@outlook.com</a>, yuan1991 }</p>
+<p>开通隧道，预留TCP地址</p>
+<h1 id="方案二、开源frp-公网IP-内网穿透"><a href="#方案二、开源frp-公网IP-内网穿透" class="headerlink" title="方案二、开源frp+公网IP&#x3D;内网穿透"></a>方案二、开源frp+公网IP&#x3D;内网穿透</h1><h3 id="macbook——阿里云（公网IP-端口管理）——PC-win"><a href="#macbook——阿里云（公网IP-端口管理）——PC-win" class="headerlink" title="macbook——阿里云（公网IP+端口管理）——PC-win"></a>macbook——阿里云（公网IP+端口管理）——PC-win</h3><p>公网IP: 47.113.225.214     win实例{ admin, Yuan1991 }</p>
+<p><strong>PC工作站：admin</strong>{ lenovo, 0000 }, <strong>weston-yuan</strong>{ <a href="mailto:&#x77;&#101;&#115;&#116;&#x6f;&#110;&#45;&#x79;&#x75;&#97;&#110;&#x40;&#111;&#117;&#x74;&#108;&#x6f;&#x6f;&#x6b;&#46;&#x63;&#111;&#x6d;">weston-yuan@outlook.com</a>, Yuan1991 }</p>
+<p>1、已开通远程连接rdp模式——<strong>公网IP：端口号 { 47.113.225.214:7089 } 关闭多余端口</strong></p>
+<p>2、启动服务：阿里云server + C盘 + frpS_start.bat；PC本地+ C盘 + frpC_start.bat</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/612377399">简单几步实现内网穿透（Windows部署开源frp）</a></p>
+<h1 id="方案三、校园网IP访问，校外VPN访问"><a href="#方案三、校园网IP访问，校外VPN访问" class="headerlink" title="方案三、校园网IP访问，校外VPN访问"></a>方案三、校园网IP访问，校外VPN访问</h1><h3 id="备用方案："><a href="#备用方案：" class="headerlink" title="备用方案："></a>备用方案：</h3><p>1、开源 FastTunnel</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FastTunnel/FastTunnel">https://github.com/FastTunnel/FastTunnel</a></p>
+<p>2、PC 用putty工具远程访问Dwbian实例</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1tL4y1p7qA/?spm_id_from=333.337.search-card.all.click&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1tL4y1p7qA/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<p>3、-获取公网IP</p>
+<p>获取公网IP的方法：拨打运营商的客服电话，然后找人工服务。跟客服说我家里的宽带需要一个公网ip地址。理由：在家里搭建网站，需要用公网IP地址或者说家里安装远程监控，需要用公网IP地址。这两条理由都可以，一般2~3个小时就会给你解决IP地址问题，然后有关人员会给你打电话告诉你你的IP地址已经是公网IP了。<br>如果不给你解决，好办！直接拨打工信部公共服务电话：12381投诉</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/code-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F-Mac%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5PC/">http://example.com/2025/06/26/code-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F-Mac%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5PC/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/code/"># code</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/code-%E8%B0%B7%E6%AD%8CCoLab%E6%95%99%E7%A8%8B/">[code]谷歌CoLab教程</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/code-unity%E6%95%99%E7%A8%8B/">[code]unity教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

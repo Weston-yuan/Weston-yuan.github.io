@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[方法]遗传算法Genetic Algorithm | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[方法]遗传算法Genetic Algorithm</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:15:29</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>求解函数 f(x) &#x3D; x + 10<em>sin(5</em>x) + 7<em>cos(4</em>x) 在区间[0,9]的最大值。</p>
+<p>这个函数大概长这样：</p>
+<img src="https://i.loli.net/2021/10/28/KYWdCgvPM2GB7r8.png" width="40%">
+
+<p>那么如何应用遗传算法如何来找到这个奇怪的函数的最大值呢？事实上，不管一个函数的形状多么奇怪，遗传算法都能在很短的时间内找到它在一个区间内的(近似)最大值。</p>
+<h3 id="1-介绍（根据自己的笔记整理介绍部分）"><a href="#1-介绍（根据自己的笔记整理介绍部分）" class="headerlink" title="1.介绍（根据自己的笔记整理介绍部分）"></a>1.介绍（根据自己的笔记整理介绍部分）</h3><p>遗传算法(Genetic Algorithm)遵循『适者生存』、『优胜劣汰』的原则，是一类借鉴生物界自然选择和自然遗传机制的随机化搜索算法。遗传算法模拟一个人工种群的进化过程，通过选择(Selection)、交叉(Crossover)以及变异(Mutation)等机制，在每次迭代中都保留一组候选个体，重复此过程，种群经过若干代进化后，理想情况下其适应度达到<em><strong>近似最优</strong></em>的状态。自从遗传算法被提出以来，其得到了广泛的应用，特别是在函数优化、生产调度、模式识别、神经网络、自适应控制等领域，遗传算法发挥了很大的作用，提高了一些问题求解的效率。</p>
+<p>种群：有很多个体组成的群体；</p>
+<p>个体（染色体）：相当于待优化（求解）问题的一个解；</p>
+<p>基因：每个解的组成分量；</p>
+<p>算子：选择、交叉、变异；</p>
+<h3 id="2-遗传算法组成"><a href="#2-遗传算法组成" class="headerlink" title="2.遗传算法组成"></a>2.遗传算法组成</h3><ul>
+<li><p>编码 -&gt; 创造染色体</p>
+</li>
+<li><p>个体 -&gt; 种群</p>
+</li>
+<li><p>适应度函数</p>
+</li>
+<li><p>遗传算子</p>
+<p>  选择</p>
+<p>  交叉</p>
+<p>  变异</p>
+</li>
+<li><p>运行参数</p>
+<p>  是否选择精英操作</p>
+<p>  种群大小</p>
+<p>  染色体长度</p>
+<p>  最大迭代次数</p>
+<p>  交叉概率</p>
+<p>  变异概率</p>
+</li>
+</ul>
+<p>2.1 编码与解码</p>
+<p>实现遗传算法的第一步就是明确对求解问题的编码和解码方式。对于函数优化问题，一般有两种编码方式，各具优缺点实数编码：</p>
+<ul>
+<li>直接用实数表示基因，容易理解且不需要解码过程，但容易过早收敛，从而陷入局部最优</li>
+<li>二进制编码：稳定性高，种群多样性大，但需要的存储空间大，需要解码且难以理解<br>对于求解函数最大值问题，我选择的是二进制编码。</li>
+</ul>
+<img src="https://i.loli.net/2021/10/28/UlHFfMc1spQBxCj.png" width="40%">
+
+<p>以我们的目标函数 f(x) &#x3D; x + 10sin(5x) + 7cos(4x), x∈[0,9] 为例。</p>
+<p>假如设定求解的精度为小数点后4位，可以将x的解空间划分为(9-0)×(1e+4)&#x3D;90000个等分。</p>
+<p><code>2^16&lt;90000&lt;2^17</code>，需要17位二进制数来表示这些解。</p>
+<p>换句话说，一个解的编码就是一个17位的二进制串。</p>
+<p>一开始，这些二进制串是随机生成的。</p>
+<p>一个这样的二进制串代表一条染色体串，这里染色体串的长度为17。  对于任何一条这样的染色体chromosome，如何将它复原(解码)到[0,9]这个区间中的数值呢？  对于本问题，我们可以采用以下公式来解码：</p>
+<p><code>x = 0 + decimal(chromosome)×(9-0)/(2^17-1)</code></p>
+<p><code>decimal( ):</code> 将二进制数转化为十进制数<br>一般化解码公式：<br><code>f(x), x∈[lower_bound, upper_bound] x = lower_bound + decimal(chromosome)×(upper_bound-lower_bound)/(2^chromosome_size-1)</code></p>
+<ul>
+<li>lower_bound: 函数定义域的下限</li>
+<li>upper_bound: 函数定义域的上限</li>
+<li>chromosome_size: 染色体的长度<br>通过上述公式，我们就可以成功地将二进制染色体串解码成[0,9]区间中的十进制实数解。</li>
+</ul>
+<p>2.2 个体与种群</p>
+<p>『染色体』表达了某种特征，这种特征的载体，称为『个体』。<br>对于本次实验所要解决的一元函数最大值求解问题，个体可以用上一节构造的染色体表示，一个个体里有一条染色体。许多这样的个体组成了一个种群，其含义是一个一维点集(x轴上[0,9]的线段)。</p>
+<p>2.3 适应度函数</p>
+<p>遗传算法中，一个个体(解)的好坏用适应度函数值来评价，在本问题中，f(x)就是适应度函数。适应度函数值越大，解的质量越高。适应度函数是遗传算法进化的驱动力，也是进行自然选择的唯一标准，它的设计应结合求解问题本身的要求而定。</p>
+<p>适应度函数的尺度变换——在求极值的场景下</p>
+<img src="https://i.loli.net/2021/11/19/LuXj5l9iRBsqnVp.png" width="70%">
+
+<p>2.4 遗传算子</p>
+<p>我们希望有这样一个种群，它所包含的个体所对应的函数值都很接近于f(x)在[0,9]上的最大值，但是这个种群一开始可能不那么优秀，因为个体的染色体串是随机生成的。如何让种群变得优秀呢？不断的进化。每一次进化都尽可能保留种群中的优秀个体，淘汰掉不理想的个体，并且在优秀个体之间进行染色体交叉，有些个体还可能出现变异。种群的每一次进化，都会产生一个最优个体。种群所有世代的最优个体，可能就是函数f(x)最大值对应的定义域中的点。如果种群无休止地进化，那总能找到最好的解。但实际上，我们的时间有限，通常在得到一个看上去不错的解时，便终止了进化。对于给定的种群，如何赋予它进化的能力呢？</p>
+<img src="https://i.loli.net/2021/10/28/UHq8SZaiw5VYyJN.png" width="70%">
+
+<p>一般来说，<code>交叉概率(cross_rate)比较大，变异概率(mutate_rate)</code>极低。像求解函数最大值这类问题，我设置的<code>交叉概率(cross_rate)是0.6，变异概率(mutate_rate)是0.01</code>。因为遗传算法相信2条优秀的父母染色体交叉更有可能产生优秀的后代，而变异的话产生优秀后代的可能性极低，不过也有存在可能一下就变异出非常优秀的后代。这也是符合自然界生物进化的特征的。</p>
+<p>选择——轮盘赌注选择法</p>
+<img src="https://i.loli.net/2021/11/19/usVvewoXpPatLjr.png" width="70%">
+
+<p>交叉——单点交叉、两点交叉</p>
+<p>（图注：交叉单点选在第五位，第五位以后交换；交叉选两点，交换两点之间）</p>
+<img src="https://i.loli.net/2021/11/19/ZRPuEy3T8nJkHjV.png" width="70%">
+
+<p>变异——选定变异概率，与随机数进行比较</p>
+<img src="https://i.loli.net/2021/11/19/HWI91VYomTMFrvZ.png" width="70%">
+
+<h3 id="3、遗传算法的流程"><a href="#3、遗传算法的流程" class="headerlink" title="3、遗传算法的流程"></a>3、遗传算法的流程</h3><img src="https://i.loli.net/2021/10/28/7uLYqMBOtQWVIkZ.png" width="40%">
+
+<p>测试结果</p>
+<ul>
+<li>最优个体：00011111011111011</li>
+<li>最优适应度：24.8554</li>
+<li>最优个体对应自变量值：7.8569<br>达到最优结果需要的迭代次数：多次实验后发现，达到收敛的迭代次数从20次到一百多次不等迭代次数与平均适应度关系曲线（横轴：迭代次数，纵轴：平均适应度）</li>
+</ul>
+<h3 id="在-MATLAB-中使用-GA-工具"><a href="#在-MATLAB-中使用-GA-工具" class="headerlink" title="在 MATLAB 中使用 GA 工具"></a>在 MATLAB 中使用 GA 工具</h3><ol>
+<li>打开 Optimization 工具，在 Solver 中选择 ga - genetic algorithm，在 Fitness function 中填入 @target</li>
+<li>在你的工程文件夹中新建 target.m，注意MATLAB的当前路径是你的工程文件夹所在路径</li>
+<li>在 target.m 中写下适应度函数，比如<br><code>function [ y ] = target(x) y = -x-10*sin(5*x)-7*cos(4*x); end</code></li>
+</ol>
+<ul>
+<li>MATLAB中的GA只求解函数的(近似)最小值，所以先要将目标函数取反。</li>
+</ul>
+<ol>
+<li>打开 Optimization 工具，输入变量个数(Number of variables) 和 自变量定义域(Bounds) 的值，点击 Start，遗传算法就跑起来了。<br>5最终在输出框中可以看到函数的(近似)最小值，和达到这一程度的迭代次数(Current iteration)和最终自变量的值(Final point)</li>
+<li>在 Optimization - ga 工具中，有许多选项。通过这些选项，可以设置下列属性</li>
+</ol>
+<ul>
+<li>种群(Population)</li>
+<li>选择(Selection)</li>
+<li>交叉(Crossover)</li>
+<li>变异(Mutation)</li>
+<li>停止条件(Stopping criteria)</li>
+<li>画图函数(Plot functions)</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E6%96%B9%E6%B3%95-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95Genetic-Algorithm/">http://example.com/2025/06/26/%E6%96%B9%E6%B3%95-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95Genetic-Algorithm/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%96%B9%E6%B3%95/"># 方法</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E6%96%B9%E6%B3%95-%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB-%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E5%A5%96%E5%8A%B1-%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E5%86%B3%E7%AD%96/">[方法]马尔可夫-马尔可夫奖励-马尔可夫决策</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E6%96%B9%E6%B3%95-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F-BN%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C-DBN%E5%8A%A8%E6%80%81%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/">[方法]贝叶斯公式-BN贝叶斯网络-DBN动态贝叶斯网络</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

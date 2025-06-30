@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[方法]贝叶斯公式-BN贝叶斯网络-DBN动态贝叶斯网络 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[方法]贝叶斯公式-BN贝叶斯网络-DBN动态贝叶斯网络</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:14:14</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、贝叶斯公式Bayesian"><a href="#一、贝叶斯公式Bayesian" class="headerlink" title="一、贝叶斯公式Bayesian"></a>一、贝叶斯公式Bayesian</h1><p><strong>贝叶斯公式</strong>：</p>
+<img src="https://s2.loli.net/2022/11/21/gj3cy6rps2uPWlU.png" width="20%">
+
+<p><strong>全概率公式（联合概率分布）：</strong></p>
+<img src="https://s2.loli.net/2022/11/21/3XtjYRqpGyPS5Tf.png" width="40%">
+
+<h2 id="1、贝叶斯公式推导"><a href="#1、贝叶斯公式推导" class="headerlink" title="1、贝叶斯公式推导"></a>1、贝叶斯公式推导</h2><p>【已知】假设学校总人数U个</p>
+<p>穿长裤的（男生）：<code>U*P(boy)*P(pants|boy)</code></p>
+<p>P(boy)是男生的概率 &#x3D; 60%</p>
+<p>P(pants|boy)是条件概率，即在boy条件下穿长裤的概率，所有男生都穿长裤 &#x3D; 100%</p>
+<p>穿长裤的（女生）：<code>U*P(girl)*P(pants|girl)</code>.</p>
+<p>【要求】穿长裤的人里面有多少女生: <code>P(girl|pants)</code></p>
+<p>穿长裤的总数：<code>U*P(boy)*P(pants|boy) + U*P(girl)*P(pants|girl)</code>.</p>
+<p>所以，</p>
+<p><code>P(girl|pants) = U*P(girl)*P(pants|girl) / [U*P(boy)*P(pants|boy) + U*P(girl)*P(pants|girl)]</code></p>
+<p>化简，约掉U</p>
+<p><code>P(girl|pants) = P(girl)*P(pants|girl) / [P(boy)*P(pants|boy) + P(girl)*P(pants|girl)]</code></p>
+<p>分母为P(pants)</p>
+<p>【结果】<code>P(girl|pants) = P(girl)*P(pants|girl) / P(pants)</code></p>
+<h2 id="案例1——拼写纠错"><a href="#案例1——拼写纠错" class="headerlink" title="案例1——拼写纠错"></a>案例1——拼写纠错</h2><p>【问题】我们看到用户输入了一个不在字典中的单词，我们需要去猜测“用户想输入的是什么”</p>
+<p>即求   P(我们猜测他想输入的单词 | 他实际输入的单词)</p>
+<img src="https://s2.loli.net/2022/11/21/d3lWPqXFsCgL51z.png" width="40%">
+
+<p>用户实际输入的单词为 D</p>
+<p>猜测1：P(h1|D) , 猜测2：P(h2|D), 猜测3：P(h3|D) …</p>
+<p>统一为：P(h|D)</p>
+<p>【结果】<code>P(h|D) = P(h) * P(D|h) / P(D)</code>.</p>
+<p>对不同的具体猜测h1、h2、h3 ，P(D)都是一样的，所以在比较 P(h1|D) 和 P(h2|D) 可以忽略 P(D)</p>
+<p>P(h)为先验概率：这里为h1、h2、h3的词频统计</p>
+<p>P(D|h) 为自定规则：这里为用户输入的信息熵差别</p>
+<img src="https://s2.loli.net/2022/11/21/vU5NLM9Xxy4bB8I.png" width="40%">
+
+<h2 id="案例2——垃圾邮件过滤"><a href="#案例2——垃圾邮件过滤" class="headerlink" title="案例2——垃圾邮件过滤"></a>案例2——垃圾邮件过滤</h2><p>【问题】.</p>
+<p>给定一封邮件，判定它是否属于垃圾邮件</p>
+<p>【1.数学表达】.</p>
+<p>D表示这封邮件，D由N个单词组成，用h+表示垃圾邮件，h-表示正常邮件</p>
+<p><code>P(h+|D) = P(h+) * P(D|h+) / P(D)</code></p>
+<p><code>P(h-|D) = P(h-) * P(D|h-) / P(D)</code></p>
+<p>先验概率P(h+)和P(h-)易得：即邮件库中垃圾邮件和正常邮件的比例</p>
+<p>【2.扩展D的表达】.</p>
+<p>D里有N个词，即是垃圾邮件情况下，D恰好按d1、d2、d3排序的概率</p>
+<p><code>P(D|h+) = P(d1,d2,... dn|h+) = P(d1|h+) * P(d2|d1,h+) * P(d3|d2,d1,h+) * ...</code></p>
+<p>【3.化简：朴素贝叶斯】</p>
+<p>假设di与di-1是完全条件无关的（朴素贝叶斯假设特征之间相互独立，互不影响</p>
+<p>化简为：<code>P(d1|h+) * P(d2|h+) * P(d3|h+) * ...</code></p>
+<p>【4.结果】只要统计di这个单词在垃圾邮件中出现的词频即可</p>
+<p>计算 d1、d2、d3在垃圾邮件中的词频；</p>
+<p>计算 d1、d2、d3在正常邮件中的词频；</p>
+<img src="https://s2.loli.net/2022/11/21/cu5GyWzLdHQXVIh.png" width="40%">
+
+<h1 id="二、BN贝叶斯网络"><a href="#二、BN贝叶斯网络" class="headerlink" title="二、BN贝叶斯网络"></a>二、BN贝叶斯网络</h1><h2 id="1、BN的数学表达-每个节点的概率-P-X-parents-X"><a href="#1、BN的数学表达-每个节点的概率-P-X-parents-X" class="headerlink" title="1、BN的数学表达 + 每个节点的概率&#x3D;P (X | parents(X) )"></a>1、BN的数学表达 + 每个节点的概率&#x3D;P (X | parents(X) )</h2><p>组成条件：</p>
+<ul>
+<li>一组变量 X&#x3D;{ X1, X2, … Xn }</li>
+<li>一个编码了条件独立信息的有向无环图S，每个节点代表一个变量X_i</li>
+<li>一系列局部概率信息P</li>
+</ul>
+<p><strong>贝叶斯网络的独立性假设：每个节点的概率只依赖父节点</strong></p>
+<img src="https://s2.loli.net/2022/11/25/cwxtnVgojD29FlT.png" width="60%">
+
+<p>BN的数学表达，联合概率可写成局部概率的乘积：</p>
+<p><code>p(x) = PRODUCT( p(xi|pai) )</code></p>
+<p>如下图：<code>P(R,W,S,C) = P(R)*P(C)*P(W|C,R)*P(S|W)</code></p>
+<img src="https://s2.loli.net/2022/11/25/MV8KTCbXkFnlWBJ.png" width="60%">
+
+<h2 id="2、建立BN的步骤"><a href="#2、建立BN的步骤" class="headerlink" title="2、建立BN的步骤"></a>2、建立BN的步骤</h2><p>（1）明确想解决的问题，依据条件建立网络结构</p>
+<p>（2）采集足够的观测数据</p>
+<p>（3）根据数据更新节点参数（各节点条件概率）</p>
+<p><strong>贝叶斯是可解释网络（对比ML、DL），适用概率推断问题</strong></p>
+<h2 id="3、BN-case贝叶斯网络案例"><a href="#3、BN-case贝叶斯网络案例" class="headerlink" title="3、BN-case贝叶斯网络案例"></a>3、BN-case贝叶斯网络案例</h2><p>（1）录取概率推理</p>
+<img src="https://s2.loli.net/2022/11/25/uAY7SyTwKVvPIgX.png" width="40%">
+
+<p>教程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SkC8S3wuIfg">https://www.youtube.com/watch?v=SkC8S3wuIfg</a></p>
+<p>（2）获得offer的概率推理</p>
+<img src="https://s2.loli.net/2022/11/25/ZhOs57J4laHvixo.png" width="40%">
+
+<p>教程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=DEHqIxX1Kq4">https://www.youtube.com/watch?v=DEHqIxX1Kq4</a></p>
+<p>（3）Classic Monty Hall获奖概率推理</p>
+<img src="https://s2.loli.net/2022/11/25/T6tIqWBnuEXo8N1.png" width="40%">
+
+<p>教程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SkC8S3wuIfg">https://www.youtube.com/watch?v=SkC8S3wuIfg</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1HP4y1j7oT/?spm_id_from=333.337.search-card.all.click&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1HP4y1j7oT/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1RL6-C4Tbkxo5-qx13m0dao7pd76vyXIW#scrollTo=RDHPydeltnH-">https://colab.research.google.com/drive/1RL6-C4Tbkxo5-qx13m0dao7pd76vyXIW#scrollTo=RDHPydeltnH-</a></p>
+<p>（4）学校录取率推理</p>
+<img src="https://s2.loli.net/2022/11/25/pnNu634wfIQsWbK.png" width="60%">
+
+<p>教程：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1pS4y1a7dr/?spm_id_from=333.999.0.0&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1pS4y1a7dr/?spm_id_from=333.999.0.0&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<h2 id="4、Python工具包"><a href="#4、Python工具包" class="headerlink" title="4、Python工具包"></a>4、Python工具包</h2><p><strong>pomegranate</strong></p>
+<p><strong>pgmpy</strong></p>
+<p><strong>Genie</strong>   用于可视化DBN分析</p>
+<h1 id="三、DBN动态贝叶斯网络"><a href="#三、DBN动态贝叶斯网络" class="headerlink" title="三、DBN动态贝叶斯网络"></a>三、DBN动态贝叶斯网络</h1><p>Genie+DBN  可视化构建动态贝叶斯网络</p>
+<img src="https://s2.loli.net/2022/12/02/p2UOPZH1As4EXtG.png" width="40%">
+
+<p><strong>总结四：动态DBN网络结构不变，节点参数随时间slice变化</strong></p>
+<p>Genie+DBN  按时间序列t展开模型</p>
+<img src="https://s2.loli.net/2022/12/02/Mjyx68HiFb25gIZ.png" width="60%">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E6%96%B9%E6%B3%95-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F-BN%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C-DBN%E5%8A%A8%E6%80%81%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/">http://example.com/2025/06/26/%E6%96%B9%E6%B3%95-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F-BN%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C-DBN%E5%8A%A8%E6%80%81%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%96%B9%E6%B3%95/"># 方法</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E6%96%B9%E6%B3%95-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95Genetic-Algorithm/">[方法]遗传算法Genetic Algorithm</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E6%96%B9%E6%B3%95-TOPSIS%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95/">[方法]TOPSIS优劣解距离法</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

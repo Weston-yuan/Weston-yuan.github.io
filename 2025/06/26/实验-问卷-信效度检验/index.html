@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[实验]问卷-信效度检验 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[实验]问卷-信效度检验</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:09:45</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、信度-效度-概念"><a href="#一、信度-效度-概念" class="headerlink" title="一、信度&amp;效度 概念"></a>一、信度&amp;效度 概念</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><img src="https://s2.loli.net/2022/12/04/xVsmQjzD4hGryab.png" width="30%">
+
+<p><strong>信度————方差</strong></p>
+<p>信度是指测验结果的一致性、稳定性及可靠性。</p>
+<p>指的是采取同样的方法对同一对象重复进行测量时，其所得结果相一致的程度。从另一方面来说，信度就是指测量数据的可靠程度。信度公式为X&#x3D;T+B+E，T表示真实值，B表示偏差即系统误差，E表示测量的随机误来差，X 表示测量结果。</p>
+<p><strong>效度————偏差</strong></p>
+<p>效度即有效性。</p>
+<p>是指测量工具或手段能够准确测出所需测量的事物或者所测量到的结果反映所想要考察内容的程度，测量结果与要考察的内容越吻合，则效度越高；反之，则效度越低。效度是科学的测量工具所必须具备的最重要的条件。</p>
+<h2 id="2、适用场景"><a href="#2、适用场景" class="headerlink" title="2、适用场景"></a>2、适用场景</h2><p>信度和效度的评价指标有很多，常用的有：克隆巴赫信度系数(Cronbach α）方法测量信度、以及探索性因子分析（系数、显著性、KMO检验、巴特球形检验）测量效度。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1W24y1k78z/?spm_id_from=333.337.search-card.all.click&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1W24y1k78z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1eK411K7tD/?spm_id_from=333.788&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1eK411K7tD/?spm_id_from=333.788&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<h1 id="二、信度检验"><a href="#二、信度检验" class="headerlink" title="二、信度检验"></a>二、信度检验</h1><h2 id="1、方法和工具"><a href="#1、方法和工具" class="headerlink" title="1、方法和工具"></a>1、方法和工具</h2><p>方法：Cronbach’α</p>
+<p>工具：SPSS, SPSSAU</p>
+<ul>
+<li>信度分析仅仅是针对量表数据</li>
+<li>信度分析需要针对每一具体细分维度或者变量进行分析（如同一问题的5个维度，每个维度有3个具体量表问题）</li>
+<li>以维度作为单位分别进行信度分析；最终将所有维度的α系数值进行汇总整理成表格，并且输出。</li>
+<li>α系数值通常大于0.6即说明信度较好（但小于2个题时通常会较低 ）</li>
+<li>如果α信度信度系数值小于0，请查看是否有反向题（应改变题项描述）</li>
+</ul>
+<h2 id="2、案例"><a href="#2、案例" class="headerlink" title="2、案例"></a>2、案例</h2><p>（1）为测量消费者对某产品的购买意愿及影响因素（共5个分别为：因素产品, 促销, 渠道推广, 价格, 个性化服务）</p>
+<p>设计了一份问卷。共25题，其中Q1~Q19均为量表题。</p>
+<p>现希望对此份数据信度情况进行分析，以验证数据质量可靠。</p>
+<p>（2）本例子中涉及6个维度，则分别需要进行六次操作，然后将六次操作的结果整理合并整理成一个表格用于研究报告中输出。</p>
+<p>以其中一个维度为例：</p>
+<p>选择对应题项，拖拽至右侧分析框中，默认输出Cronbach α系数。点击“开始信度分析”。</p>
+<img src="https://s2.loli.net/2022/12/04/3k785Ruf4lIxOya.png" width="30%">
+
+<p>（3）输出结果</p>
+<img src="https://s2.loli.net/2022/12/04/xKMRSpcAoay3n6t.png" width="50%">
+
+<p><strong>Cronbach α系数</strong>：衡量样本回答的可靠性，分析时主要关注此值。α系数值高于0.8，则说明信度高；α系数介于0.7<del>0.8之间；则说明信度较好; α系数介于0.6</del>0.7,则说明信度可接受; α系数小于0.6,说明信度不佳。</p>
+<p><strong>校正项总计相关性(CITC)</strong>：为分析项之间的相关系数，通常大于0.4即可。这一指标，通常用于预测试中。</p>
+<p><strong>项已删除的α系数</strong>：为删除该分析项后，剩下分析项的α系数，若此值明显高于Cronbach α系数值，可考虑删除该分析项。这一指标，通常用于预测试中。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/436918701/answer/2140636408">https://www.zhihu.com/question/436918701/answer/2140636408</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1eK411K7tD/?spm_id_from=333.788&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV1eK411K7tD/?spm_id_from=333.788&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<h1 id="三、效度检验"><a href="#三、效度检验" class="headerlink" title="三、效度检验"></a>三、效度检验</h1><h2 id="1、方法和工具-1"><a href="#1、方法和工具-1" class="headerlink" title="1、方法和工具"></a>1、方法和工具</h2><p>方法：因子分析（系数、显著性、KMO检验、巴特球形检验）</p>
+<p>工具：SPSS, SPSSAU</p>
+<ul>
+<li>效度分析只针对量表题</li>
+<li>如果KMO值过低，可删除共同度较低项，再次分析</li>
+<li>效度分析时，很可能需要删除题目，最核心的是让维度和题项对应关系保持基本一致性</li>
+<li>无论如何效度分析均不达标，可考虑以单个维度分别进行分析，有几个维度就分析几次（同一维度的题目一起分析，仅需要删除掉因子载荷系数值低于0.4的题项即可，不用考虑多个维度间的逻辑对应关系）</li>
+<li>如果分析过程中删除某题项（即删除该题目及对应的数据），后续所有的分析都要按删除后的问卷作为标准进行分析</li>
+</ul>
+<h2 id="2、案例-1"><a href="#2、案例-1" class="headerlink" title="2、案例"></a>2、案例</h2><p>为测量消费者对某产品的购买意愿及影响因素，其中Q1~Q15为影响因素对应题项。</p>
+<p>（1）在左侧分析方法菜单栏找到[问卷研究]&gt;[效度]</p>
+<p>（2）将变量Q1~Q15拖拽到右侧分析框内</p>
+<p>（3）设置输出因子个数，预期有5个维度，所以设置因子个数为5。如果没有确定预期维度，也可以选择让系统输出。</p>
+<p>（4）点击“开始效度分析”</p>
+<img src="https://s2.loli.net/2022/12/04/ehlkX5jirE9FYq4.png" width="30%">
+
+<p>输出结果：</p>
+<img src="https://s2.loli.net/2022/12/04/vpq6gZh8DRjd3TX.png" width="40%">
+
+<p><strong>KMO值与巴特球形检验P值</strong>：KMO值为0.870，大于0.6，通过Bartlett球形检验，意味着数据具有效度。</p>
+<p>同时，旋转后累积方差解释率为69.708%&gt;50%，说明研究项的信息量可以有效的提取出来。</p>
+<p><strong>题项与因子的对应关系</strong>：如果对应关系与研究心理预期基本一致，则说明效度良好。可以看到所有题项的共同度均大于0.4。</p>
+<p>除Q6与预期维度对应不符以外，其他题项均与预期对应关系一致，且题项的因子载荷系数绝对值均高于0.4。因而删除Q6，再次分析直至满足题项与因子对应关系。</p>
+<h1 id="四、AMOS因子分析——结构方程"><a href="#四、AMOS因子分析——结构方程" class="headerlink" title="四、AMOS因子分析——结构方程"></a>四、AMOS因子分析——结构方程</h1><img src="https://s2.loli.net/2022/12/04/ysQ5GJTD2lH1meB.png" width="30%">
+
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18D4y197K3/?spm_id_from=333.788&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV18D4y197K3/?spm_id_from=333.788&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E5%AE%9E%E9%AA%8C-%E9%97%AE%E5%8D%B7-%E4%BF%A1%E6%95%88%E5%BA%A6%E6%A3%80%E9%AA%8C/">http://example.com/2025/06/26/%E5%AE%9E%E9%AA%8C-%E9%97%AE%E5%8D%B7-%E4%BF%A1%E6%95%88%E5%BA%A6%E6%A3%80%E9%AA%8C/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%AE%9E%E9%AA%8C/"># 实验</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E6%96%B9%E6%B3%95-BWM%EF%BC%88Best-Worst-Method%EF%BC%89%E6%9C%80%E4%BC%98%E6%9C%80%E5%8A%A3%E6%B3%95%E6%95%99%E7%A8%8B/">[方法]BWM（Best Worst Method）最优最劣法教程</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E5%AE%9E%E9%AA%8C-%E5%AE%9E%E9%AA%8C%E6%96%B9%E6%A1%88-%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0/">[实验]实验方案-设计笔记</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

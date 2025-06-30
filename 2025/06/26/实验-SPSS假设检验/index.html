@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[实验]SPSS假设检验 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[实验]SPSS假设检验</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:04:57</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="一、介绍什么的，假设检验"><a href="#一、介绍什么的，假设检验" class="headerlink" title="一、介绍什么的，假设检验"></a>一、介绍什么的，假设检验</h3><p>统计检验：利用统计数据，来说明多大把握证明结论</p>
+<p>P值越小，统计意义的把握性越高，P &lt; 0.05，意思为偏差的概率小于5%，统计意义显著。</p>
+<p>假设检验：某方案、变量对结果有无影响效果。</p>
+<p>H0： 虚无假设null hypothesis————没效果</p>
+<p>H1：备择假设alternative hypothesis————有效果</p>
+<p>【参数检验】：通常是假设总体服从正态分布，样本统计量服从正态分布的基础之上，对总体分布中一些未知的参数，例如总体均值、总体方差和总体标准差等进行统计推断。</p>
+<p>【非参数检验】：总体的分布情况未知，同时样本容量又小，无法运用中心极限定理实施参数检验推断总体的集中趋势和离散程度的参数情况。非参数检验对总体分布不做假设，直接从样本的分析入手推断总体分布。</p>
+<p>与参数检验相比，非参数检验适用范围广，特别适用于小样本数据、总体分布未知或偏态、方差不齐及混 合样本等各类型数据。</p>
+<img src="https://s2.loli.net/2022/04/04/9zLFsQghCWED8nM.png" width="40%">
+
+<img src="https://s2.loli.net/2022/04/04/zwIjPeplWStLbaK.png" width="100%">
+
+<h3 id="二、参数检验————-T检验、方差F检验"><a href="#二、参数检验————-T检验、方差F检验" class="headerlink" title="二、参数检验———— T检验、方差F检验"></a>二、参数检验———— T检验、方差F检验</h3><p><strong>【（一）T检验】</strong></p>
+<p>T检验是最常见的检验————用于比较样本均值和C。统计学家建立了以无差别的总体（符合正态分布）基础上不同规模随机采样所获得的t值的概率分布，也就是T分布。</p>
+<p>（T分布表）不同的T值对应的概率表，对应着P值</p>
+<p>T检验 就是看看如果是在无差别总体中随机采样获得当前的T值的概率有多大（P值也就是显著性Sig.值）。<br>T检验分为三种情形：</p>
+<ul>
+<li>单样本t检验，</li>
+<li>独立样本t检验</li>
+<li>双样本t检验，</li>
+<li>配对t检验。</li>
+</ul>
+<p><strong>【1、单样本T检验】</strong></p>
+<p>单样本t指的是某类样本跟某个均值的对比，eg:大一新生身高,跟往年均值的差异</p>
+<img src="https://s2.loli.net/2022/04/04/zZ5nQgEavGlVwrT.png" width="80%">
+
+<p><strong>【2、独立样本T检验】</strong></p>
+<p>独立样本T检验用于分析定类数据（X）与定量数据（Y）之间的差异情况————指的是两个类别之间均值的对比。<br>独立样本T检验除了需要服从正态分布、还要求两组样本的总体方差相等。（当数据不服从正态分布或方差不齐时，则考虑使用非参数检验。）</p>
+<p>eg.如大一男女身高的对比</p>
+<p><strong>独立样本T检验 eg.</strong></p>
+<p>分析T大学和F大学两个大学的大二学生的语文成绩之间是否存在显著性差异</p>
+<p>两个班级（定类数据），同学的成绩（定量数据），差异情况</p>
+<img src="https://i.loli.net/2021/11/18/lzweDOEYMnmUNJc.png" width="40%">
+
+<p>H0：T大学学生的成绩和F大学学生的成绩没有显著性差异；</p>
+<p>H1：T大学学生的成绩和F大学学生的成绩有显著性差异。</p>
+<p>数据表明：</p>
+<p>在两组数据显示方差一致的情况下（F&#x3D;0.012;P&#x3D;0.915），清华大学大二学生的成绩（SD&#x3D;4.69;M&#x3D;83.85）与复旦大学大二学生的成绩（SD&#x3D;4.81;M&#x3D;85.92）没有显著差异，接受原假设，拒绝对立假设，其中p&#x3D;0.56&gt;0.05.</p>
+<p><strong>【3、双样本t检验】</strong></p>
+<p>双样本T检验：两个均值的比较（相对于标准差、采样规模的关系）</p>
+<p>（用于对照组）：两个独立的被试组</p>
+<img src="https://s2.loli.net/2022/04/04/dbNiHrGKC4wzIo9.png" width="60%">
+
+<p>解读：一看方差检验是不是过了（前提），二看P值（两组均值是否反应显著性）</p>
+<p><strong>实例：</strong></p>
+<img src="https://s2.loli.net/2022/04/04/pZjcQXnBlNa6zD1.png" width="60%">
+
+<p><strong>【4、配对t检验】</strong></p>
+<p>一个被试组的前后，（同一个&#x2F;批被试接受两种不同的处理）</p>
+<img src="https://s2.loli.net/2022/04/04/qmwstMORfjebGoE.png" width="80%">
+
+<ul>
+<li>用于分析同一组样本定量数据间的差异对比关系</li>
+<li>两类定量数据全部服从正态分布时。（一列非正太分布要用配对样本的秩和检验）<br>入口：<code>SPSS —— 分析 —— 比较平均值 —— 成对样本T检验</code></li>
+<li>*配对t检验实例eg. **</li>
+</ul>
+<img src="https://i.loli.net/2021/11/18/4c7ZqYoSIjUhnkD.png" width="60%">
+
+<p>H0：团队协作教学法对运动员的篮球技术没有显著性差异；</p>
+<p>H1：团队协作教学法对运动员的篮球技术有显著性差异。</p>
+<img src="https://i.loli.net/2021/11/18/golLbvO9kxtW2pz.png" width="60%">
+
+<p>P大于0.05 ，差异不显著，不具有统计学意义</p>
+<p>P小于等于0.05 ，差异显著，具有统计学意义，拒绝零假设</p>
+<img src="https://i.loli.net/2021/11/18/qdf7NrhoUY3pbeB.png" width="60%">
+
+<p>数据表明：团队协作教学对技术达标有明显影响。对技术水平没有明显影响。</p>
+<p><strong>【（二）F检验——方差分析】</strong></p>
+<p>方差F检验：ANOVA， 符合F分布</p>
+<p>F值：查F分布表，对应P值（组内方差与随机波动方差的比较）</p>
+<p>目的：分析“定类自变量X”与“定量因变量Y”的关系</p>
+<p><strong>【5、单因素F方差检验】</strong></p>
+<p>单因素方差：</p>
+<p>一个因素的不同水平对因变量的影响（eg.按钮大小对XX 影响，播放速度对XXX影响）</p>
+<img src="https://s2.loli.net/2022/04/04/GmtozHaMiXJVvLy.png" width="80%">
+
+<p><strong>【6、多因素F方差检验】</strong></p>
+<img src="https://s2.loli.net/2022/04/04/evuODSI2RYMnwtd.png" width="60%">
+
+<p>比如研究者测试某新药对于胆固醇水平是否有疗效；研究者共招募72名被试，男女分别为36名，以及男女分别再细分使用新药和普通药物；同时高血压患者对于新药可能有干扰，因而研究者将被试是否患高血压也纳入考虑范畴中。因而最终，X共分为三个，分别是药物(旧药和新药)、性别，是否患高血压；Y为胆固醇水平。</p>
+<p><strong>eg.</strong></p>
+<p>双因素方法分析的实例：用户因素、布局方案对效率的影响</p>
+<img src="https://s2.loli.net/2022/04/04/wqcM2kueiy3pZAl.png" width="80%">
+
+<h3 id="三、非参数检验————卡方检验"><a href="#三、非参数检验————卡方检验" class="headerlink" title="三、非参数检验————卡方检验"></a>三、非参数检验————卡方检验</h3><img src="https://s2.loli.net/2022/04/04/lg2ahEm1pHPO89U.png" width="80%">
+
+<p><strong>【7、卡方检验】</strong></p>
+<p>卡方检验，用于分类数据的分析，检验 ”定类自变量X“与“定类因变量Y”的关系</p>
+<img src="https://s2.loli.net/2022/04/04/gPoBO8nX7CqmRJ3.png" width="60%">
+
+<p><strong>实例eg.</strong></p>
+<img src="https://s2.loli.net/2022/04/04/ZKlngp3QCHGA7kj.png" width="60%">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E5%AE%9E%E9%AA%8C-SPSS%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C/">http://example.com/2025/06/26/%E5%AE%9E%E9%AA%8C-SPSS%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%AE%9E%E9%AA%8C/"># 实验</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/26/%E5%AE%9E%E9%AA%8C-%E5%AE%9E%E9%AA%8C%E6%96%B9%E6%A1%88-%E8%AE%BE%E8%AE%A1%E7%AC%94%E8%AE%B0/">[实验]实验方案-设计笔记</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E5%9F%BA%E9%87%91-%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%A6%E5%9F%BA%E9%87%91%E5%86%99%E6%B3%95/">[基金]自然科学基金写法</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

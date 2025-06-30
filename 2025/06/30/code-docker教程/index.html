@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[code]docker教程 | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[code]docker教程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 30, 2025&nbsp;&nbsp;21:00:20</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="docker快捷键"><a href="#docker快捷键" class="headerlink" title="docker快捷键"></a>docker快捷键</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看所有本地的镜像</span></span><br><span class="line">$ sudo docker images</span><br><span class="line"><span class="comment">#查看所有的容器(包括未启动)</span></span><br><span class="line">$ sudo docker ps -a</span><br><span class="line"><span class="comment">#启动一个容器并运行指定的镜像</span></span><br><span class="line">$ sudo docker run --privileged=true -it -v /本地目录:/镜像中的目录 micr.cloud.miof</span><br><span class="line"><span class="comment">#进入一个正在运行的容器</span></span><br><span class="line">$ sudo docker <span class="built_in">exec</span> -it 容器名 bash</span><br><span class="line"><span class="comment">#启动一个停止的容器</span></span><br><span class="line">$ sudo docker start 容器名</span><br><span class="line"><span class="comment">#停止一个已经启动的容器</span></span><br><span class="line">$ sudo docker stop 容器名</span><br><span class="line"><span class="comment"># 删除一个容器</span></span><br><span class="line">$ sudo docker rm 容器名</span><br><span class="line"><span class="comment"># 删除一个镜像</span></span><br><span class="line">$sudo docker rmi 镜像名</span><br><span class="line"></span><br><span class="line">【创建镜像】终端：docker build -t XXX(镜像名):tag . ( .表示在当前目录下寻找)</span><br><span class="line">eg: sudo docker build -t myimage: <span class="number">1.0</span> .</span><br><span class="line"></span><br><span class="line">【运行镜像-创建容器】终端：docker run -p <span class="number">80</span>:<span class="number">5000</span></span><br><span class="line">将镜像的端口<span class="number">5000</span>&lt;镜像文件地址&gt;映射到本地浏览器端口<span class="number">80</span>&lt;本地地址&gt;</span><br><span class="line"></span><br><span class="line">【查看所有运行的容器】 docker ps</span><br><span class="line"></span><br><span class="line">【查看所有容器（包括未运行）】 docker ps -a</span><br><span class="line"></span><br><span class="line">【停止容器】 docker stop&lt;容器 ID&gt;</span><br><span class="line"></span><br><span class="line">【重启容器:】docker restart&lt;容器 ID〉</span><br><span class="line"></span><br><span class="line">【删除容器:】docker rm&lt;容器 ID&gt;</span><br><span class="line"></span><br><span class="line">【启动一个远程 Shell】 docker <span class="built_in">exec</span> -it&lt;容器 ID&gt;  /<span class="built_in">bin</span> /bash</span><br></pre></td></tr></table></figure>
+
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><img src="https://s2.loli.net/2024/02/18/KCxzDb8Xd5UIOoE.png" width="60%"> 
+1、Dockerfile是一个自动化脚本，用于创建镜像（类似在虚拟机中安装软件的过程）
+2、Image镜像：类似虚拟机的快照，里面包含待部署的应用程序+所有依赖项-库软件
+3、通过镜像创建不同的容器：容器相当于一台台的虚拟机，每个容器独立运行-相互不影响
+<img src="https://s2.loli.net/2024/02/18/a6d5syLgDJXr8Pb.png" width="40%"> 
+
+
+<p>如何在vscode中管理docker？？？！！！<br>教程地址<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=mPquwpxyUQU">https://www.youtube.com/watch?v=mPquwpxyUQU</a><br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14s4y1i7Vf?p=7&vd_source=3f07280aa4418bc7dcb206e570de2d38">https://www.bilibili.com/video/BV14s4y1i7Vf?p=7&amp;vd_source=3f07280aa4418bc7dcb206e570de2d38</a></p>
+<p>文档<br><a target="_blank" rel="noopener" href="https://www.cainiaojc.com/docker/docker-command-manual.html">https://www.cainiaojc.com/docker/docker-command-manual.html</a></p>
+<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><p>1、官网安装<br>2、desktop UI软件<br>3、VScode插件安装<br>1）提供dockerfile语法检测、高亮<br>2）提供左侧边栏所有镜像、容器的管理<br><img src="https://s2.loli.net/2024/02/18/VTNkwghyz3laHWb.png" width="40%"> </p>
+<h2 id="示例practice"><a href="#示例practice" class="headerlink" title="示例practice"></a>示例practice</h2><p>1、创建dockerfile<br>在官方市场寻找dockerfile模板，<br>cd到目标目录下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">引用模板- XXX: 版本号</span><br><span class="line">WORKDIR /app  指定了【容器】的目标工作路径</span><br><span class="line">COPY &lt;本地路径：Dockerfile的路径&gt;&lt;工作路径：镜像的路径&gt;</span><br><span class="line">RUN 创建镜像时运行（完成docker镜像的所有创建）</span><br><span class="line">CMD [&quot;可执行文件&quot;, &quot;参数1&quot;, &quot;参数2&quot;...] 容器启动时运行</span><br></pre></td></tr></table></figure>
+
+<img src="https://s2.loli.net/2024/02/18/NvCxlVGQSEnD3cO.png" width="60%"> 
+2、【创建镜像】终端：docker build -t XXX(镜像名):tag . 
+3、【运行镜像——创建容器】终端：docker run -p 80: 5000 -d XXX(镜像名)
+将容器端口5000映射到本地浏览器端口80，-d 让容器在后台运行
+<img src="https://s2.loli.net/2024/02/18/OuQXpm5NJqf4FTn.png" width="40%"> 
+
+<p>4、定义yml文件，使多个容器协作<br><img src="https://s2.loli.net/2024/02/18/swCg2kvmUGcuqEz.png" width="60%"><br>运行所有容器：docker compose up<br>停止所有容器：docker compose down</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/30/code-docker%E6%95%99%E7%A8%8B/">http://example.com/2025/06/30/code-docker%E6%95%99%E7%A8%8B/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/code/"># code</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/30/code-anaconda%E6%95%99%E7%A8%8B/">[code]anaconda教程</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/30/code-Ubuntu%E6%95%99%E7%A8%8B/">[code]Ubuntu教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

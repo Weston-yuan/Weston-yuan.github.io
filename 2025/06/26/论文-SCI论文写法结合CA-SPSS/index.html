@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Dr.yuan">
+
+
+
+
+
+<title>[论文]SCI论文写法结合CA-SPSS | Ape-tech</title>
+
+
+
+    <link rel="icon" href="/blog.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Ape-tech wiki2025</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Ape-tech wiki2025</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/category">Categories</a>
+                
+                <a class="menu-item" href="/tag">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">[论文]SCI论文写法结合CA-SPSS</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Dr.yuan</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 26, 2025&nbsp;&nbsp;13:34:11</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><p>1、寻找范文，范文结构解析。</p>
+<p>2、数据与核心结论。</p>
+<p>3、制定论文大纲。</p>
+<p>4、endnote制作文献引用库</p>
+<h2 id="实操步骤"><a href="#实操步骤" class="headerlink" title="实操步骤"></a>实操步骤</h2><ul>
+<li>文献积累 ———Excel整理（ID、title、year、author、method、conclusion、limitation、support）</li>
+<li>PPT框架构建———PPT整理大纲（背景、现状、gap不足、研究目的&#x2F;假设&#x2F;意义）</li>
+<li>谷歌翻译快速填充内容（写完draft —— 写abstract —— 提炼题目）</li>
+<li>grammarly 刷一遍</li>
+<li>3-5篇nuture句式模仿</li>
+<li>grammarly再刷一遍</li>
+</ul>
+<h2 id="论文工具"><a href="#论文工具" class="headerlink" title="论文工具"></a>论文工具</h2><p>1、在线LaTeX公式编辑</p>
+<p><a target="_blank" rel="noopener" href="https://editor.codecogs.com/?lang=zh-cn">https://editor.codecogs.com/?lang=zh-cn</a></p>
+<p>2、在线章节框架图编辑</p>
+<p><a target="_blank" rel="noopener" href="https://app.diagrams.net/">https://app.diagrams.net/</a></p>
+<p>3、在线LaTeX表格生成</p>
+<p><a target="_blank" rel="noopener" href="https://www.tablesgenerator.com/latex_tables">https://www.tablesgenerator.com/latex_tables</a></p>
+<p>4、语法检查</p>
+<p><a target="_blank" rel="noopener" href="https://app.grammarly.com/">https://app.grammarly.com/</a></p>
+<p>5、学术翻译</p>
+<p><a target="_blank" rel="noopener" href="https://www.deepl.com/translator">https://www.deepl.com/translator</a></p>
+<h2 id="基础认知"><a href="#基础认知" class="headerlink" title="基础认知"></a>基础认知</h2><p>1、理论型论文</p>
+<p>研究人员针对本学科专业范畴内的某一课题或论题，通过严密的理论推导和理论分析，对研究成果进行理论概括和总结，提出正面的思想、主张、观点和见解的论理性论文，一般是对自然、社会或思维现象的内在规律进行的理论探讨。研究方法主要有：理论推导和假设、理论证明、理论分析、数学推理、模型化、公理化、形式化等，一般需建立数学模型或给出计算方法等。研究对象一般是纯粹的抽象理论问题。</p>
+<p>2、实验型论文</p>
+<p>科技工作者为检验某一科学理论或假说，或为发明创造，或为解决实际问题，有计划、有目的地进行科学试验，然后如实地将试验过程和创造性成果加以归纳分析，然后进行书面表达并发表。实验型论文的前提是进行科学试验，包括设计试验、研究试验，对试验结果进行分析。撰写实验性论文需要介绍试验目的，说明试验的装置、方法和过程，重点对试验结果进行分析和讨论，最终归纳、总结科学规律。</p>
+<p>3、应用型论文</p>
+<p>将研究成果应用于解决实际问题，包括技术研究、产品研制或产品设计（设计型论文）等。</p>
+<p>4、文献类型</p>
+<p>期刊论文、学术著作、学位论文、研究报告、会议论文</p>
+<h1 id="二、manuscript阶段"><a href="#二、manuscript阶段" class="headerlink" title="二、manuscript阶段"></a>二、manuscript阶段</h1><h2 id="0、全文词汇表"><a href="#0、全文词汇表" class="headerlink" title="0、全文词汇表"></a>0、全文词汇表</h2><p>通用词汇：smart, connected products (SCPs)</p>
+<p>专用词汇：A CONTEXT-AWARE SMART PRODUCT-SERVICE SYSTEM DEVELOPMENT APPROACH</p>
+<h2 id="1、Introduction"><a href="#1、Introduction" class="headerlink" title="1、Introduction"></a>1、Introduction</h2><h3 id="【1】写法其一"><a href="#【1】写法其一" class="headerlink" title="【1】写法其一"></a>【1】写法其一</h3><p>1、背景：背景1，背景2，背景3</p>
+<p>背景1：SPCs&#x2F;SPSS&#x2F;digitalization的发展</p>
+<p>背景2：Context in Smart PSS</p>
+<p>2、本文的研究目的</p>
+<p>本研究的目的是提供有关智能产品服务 (CA-SPSS) 的上下文感知系统的知识，提出概念框架并为 CA-SPSS 提供开发方法。 为此，应用了一个用于监测体力消耗强度和为非专业跑步者推荐服务的 SPSS，并从系统属性和对服务的附加值的角度进行评估。</p>
+<p>3、点出主要挑战、GAP</p>
+<p>然而，迄今为止，很少有研究关注 SPSS 的上下文分析。因此，一种集成SPSS上下文分析的开发方法有望为SPSS的开发提供一种新的范式，以更好地理解用户和服务开发环境，并产生更适合用户情况的服务解决方案。</p>
+<p>3、本文贡献&#x2F;意义（呼应结论）</p>
+<p>本研究提供了 (i) 对 CA-SPSS 概念框架的新理解； (ii) CA-SPSS 的开发方法，具体包括上下文获取、上下文建模、上下文推理和上下文分布； (iii) CA-SPSS 用于确定非职业体育比赛中体力消耗强度的方式并提供个性化服务。</p>
+<p>4、本文的内容结构介绍</p>
+<p>The remaining of this paper is organized as follows</p>
+<p>5、五条rules和案例分析</p>
+<img src="https://s2.loli.net/2023/03/12/Xks4ZomMl8GFYba.png" width="100%">
+
+<h3 id="【2】写法其二sructure-of-introduce-——-CARS"><a href="#【2】写法其二sructure-of-introduce-——-CARS" class="headerlink" title="【2】写法其二sructure of introduce —— CARS"></a>【2】写法其二sructure of introduce —— CARS</h3><p>C —— create，A —— a，R —— research，S —— space</p>
+<p><strong>CARS model：Three Moves</strong></p>
+<p>Move 1 — Establishing a research territory</p>
+<blockquote>
+<p>a. by showing that the general research area is important, central, interesting, problematic, or relevant in some way (optional)</p>
+<p>b. Literature Review</p>
+</blockquote>
+<p>Move 2 — Establishing a niche (细分方向&#x2F;领域定位)</p>
+<blockquote>
+<p>a. by indicating a gap in the previous research</p>
+<p>b. by extending previous knowledge in some way (obligatory)</p>
+</blockquote>
+<p>Move 3 — Occupying the niche（占位）</p>
+<blockquote>
+<p>a. by outlining purposes or stating the nature of the present research (obligatory)</p>
+<p>b. by listing research questions or hypotheses</p>
+<p>c. by announcing principal findings</p>
+<p>d. by stating the value of the present research</p>
+<p>e. by indicating the structure of the RP</p>
+</blockquote>
+<h2 id="2、Literature-review（用自己的话总结避免抄袭）"><a href="#2、Literature-review（用自己的话总结避免抄袭）" class="headerlink" title="2、Literature review（用自己的话总结避免抄袭）"></a>2、Literature review（用自己的话总结避免抄袭）</h2><p>1、总起介绍</p>
+<p>本节总结了相关文献中的最新发现。 具体来说，讨论了 SPSS 的发展和进步，确定了在 SPSS 中使用上下文分析的重要性，并分析了使用可穿戴设备和移动技术进行上下文检测和分析的可行性。 然后根据文献综述提出 CA-SPSS。</p>
+<p>2、背景1+GAP1</p>
+<p>背景1：SPCs&#x2F;SPSS&#x2F;digitalization的发展</p>
+<p>GAP1：然而，目前对 SPSS 的研究还没有充分探索这种情境感知系统。</p>
+<p>3、背景2+GAP2</p>
+<p>背景2：Understanding of Context in Smart PSS</p>
+<p>GAP2：由于情境意识在自适应和定义隐性需求方面的优势，情境意识有可能进一步协助开发 SPSS 的个性化 PSB。 因此，结合上下文感知和 SPSS 的开发方法很有前途，值得进一步研究。</p>
+<p>4、背景3+GAP3</p>
+<p>背景3：Feasibility of Context Detection and Analysis in SPSS</p>
+<p>GAP3：然而，现有的移动和可穿戴技术主要侧重于优化技术功能，通常用于可视化身体或运动表现。这些技术尚未被视为基于持续收集的体育相关数据的增值服务。因此，可穿戴和物联网设备可以成为理想的数据源，它们收集精确和全面的用户和环境数据的能力意味着最终可以实现 CA-SPSS，特别是在体育比赛、医疗康复和家庭护理等领域。</p>
+<p><strong>5、总结Literature review + GAP汇总</strong></p>
+<p>对本节相关研究的分析产生了以下发现：（1）通过可穿戴设备和物联网设备获取的数据为SPSS的进步提供了对用户和上下文情况的更全面的理解，（2）进一步推进的方法 集成上下文感知以更好地自适应和挖掘用户需求的 SPSS是及时和需要的，(3) CA-SPSS 可以在体育锻炼、移动医疗和家庭护理领域产生潜在的增值服务。</p>
+<h2 id="3、Methodology"><a href="#3、Methodology" class="headerlink" title="3、Methodology"></a>3、Methodology</h2><p>0、总起介绍Methodology + 方法总览图figure1</p>
+<p>整体方法由上下文生命周期的四个步骤组成，如图 1 所示：上下文获取、上下文建模、上下文推理和上下文分发。</p>
+<p>1、详解方法模块1（原理、方法、公式、算法）</p>
+<p>Context acquisition and data source</p>
+<p>2、详解方法模块2（原理、方法、公式、算法）</p>
+<p>Context modeling on Cloud</p>
+<p>3、详解方法模块3（原理、方法、公式、算法）</p>
+<p>Context reasoning for user modality identification</p>
+<p>4、详解方法模块4（原理、方法、公式、算法）</p>
+<p>Context distribution for service recommendation</p>
+<p>5、总结本章Methodology</p>
+<p>总结本节，（1）在体育锻炼和移动医疗领域定义了四种类型的上下文获取源（用户、感知、物理和推断上下文）；(2)引入了上下文建模以重新组织收集到的上下文数据； (3) 制定了基于神经网络的上下文推理过程；(4)本文提出了基于DEMATEL和MCDM的上下文分布式。该CA-SPSS框架可以感知用户随上下文变化的需求，提供了一种开发用户个性化PSB的方法，可以有效地指导SPSS的开发，尤其是在运动和移动健康领域。</p>
+<h2 id="4、case-study"><a href="#4、case-study" class="headerlink" title="4、case study"></a>4、case study</h2><p>0、总起介绍case背景 + 总览图figure</p>
+<p>1、详解case模块1（数据、方案、实施、结果）</p>
+<p>Context acquisition through Wireless sensor network</p>
+<p>2、详解case模块2（数据、方案、实施、结果）</p>
+<p>Context modeling at Cloud platform</p>
+<p>3、详解case模块3（数据、方案、实施、结果）</p>
+<p>Context reasoning for user modality identification</p>
+<p>4、详解case模块4 （数据、方案、实施、结果）</p>
+<p>Context distribution for service recommendation</p>
+<h2 id="5、Discussion"><a href="#5、Discussion" class="headerlink" title="5、Discussion"></a>5、Discussion</h2><p>0、总起介绍</p>
+<p>在本节中，服务质量和可持续价值用于评估建议的 CA-SPSS。 随后进行全面讨论，然后提供结论。</p>
+<p>1、validation + result</p>
+<p>数据、技术验证</p>
+<p>2、evaluation + result</p>
+<p>系统评估、实验验证</p>
+<p>3、Expected potential of the approach</p>
+<p>本方法与其他研究的比较、先进性</p>
+<h2 id="6、conclusion"><a href="#6、conclusion" class="headerlink" title="6、conclusion"></a>6、conclusion</h2><p>1、本文做了什么</p>
+<p>背景介绍 + 方法提出 + 方法组成部分介绍</p>
+<p>2、本文的贡献</p>
+<p>i) 开发 SPSS 的方法的新理解和概念框架已经开发，该 SPSS 集成了上下文意识以更好地自适应和挖掘关于用户需求的隐式信息。ii) 提出了用户、感知、物理和推断上下文四种类型的上下文获取上下文，随后扩展了体育锻炼和移动医疗领域的上下文定义。iii)建立了用于非专业跑步者运动强度模态检测的用户模态检测神经网络模型。iv) 支持非职业体育比赛的SPSS案例在2021年上海交通大学129长跑中进行。</p>
+<p>3、本文的不足，局限性</p>
+<p>4、未来研究内容展望</p>
+<h1 id="三、修改润色阶段"><a href="#三、修改润色阶段" class="headerlink" title="三、修改润色阶段"></a>三、修改润色阶段</h1><h2 id="1、摘要"><a href="#1、摘要" class="headerlink" title="1、摘要"></a>1、摘要</h2><h3 id="【1】写法其一-1"><a href="#【1】写法其一-1" class="headerlink" title="【1】写法其一"></a>【1】写法其一</h3><ul>
+<li>Background</li>
+<li>Knowledge gap</li>
+<li>Objective</li>
+<li>Method</li>
+<li>Key data</li>
+<li>Result</li>
+<li>conclusion</li>
+</ul>
+<img src="https://s2.loli.net/2023/03/12/FDszy2cj69IaQvi.png" width="100%">
+
+<h3 id="【2】写法其二structure-of-abstract-model-——IMRDc"><a href="#【2】写法其二structure-of-abstract-model-——IMRDc" class="headerlink" title="【2】写法其二structure of abstract model ——IMRDc"></a>【2】写法其二structure of abstract model ——IMRDc</h3><ul>
+<li>Introduction: aim, motivation, problem, thesis</li>
+<li>Methodology: methods and material, approaches, type of evidence used</li>
+<li>Results: findings, achievements, experimental&#x2F;factual achievements product</li>
+<li>Conclusion: implication, contribution, recommendation, application, (limitation, future work)<strong>结构解析</strong></li>
+</ul>
+<ol>
+<li>The writer provides background factual information.</li>
+<li>The writer combines the method, the general aim and the specific aim of the study in one sentence.</li>
+<li>The writer summarizes the methodology and provides details.</li>
+<li>The writer indicates the achievement of the study.</li>
+<li>The writer presents the implications of the study.<strong>eg. Abstract</strong><br>[1] The speed of sound in a fluid is determined by, and therefore an indicator of, the thermodynamic properties of that fluid. [2] The aim of this study was to investigate the use of an ultrasonic cell to determine crude oil properties, in particular oil density. [3] An ultrasonic cell was constructed to measure the speed of sound and tested in a crude oil sample.[a]The speed of sound was measured at temperatures between 260 and 411 K at pressures up to 75 MPs. [4] The measurements were shown to lead to an accurate determination of the bubble point of the oil. [5] This indicates that there is a possibility of obtaining fluid density from sound speed measurements and suggests that it is possible to measure sound absorption with an ultrasonic cell to determine oil viscosity.</li>
+</ol>
+<h3 id="【3】写法其三structure-of-abstract-model-——IMRDc"><a href="#【3】写法其三structure-of-abstract-model-——IMRDc" class="headerlink" title="【3】写法其三structure of abstract model ——IMRDc"></a>【3】写法其三structure of abstract model ——IMRDc</h3><ul>
+<li>Introduction: aim, motivation, problem, thesis</li>
+<li>Methodology: methods and material, approaches, type of evidence used</li>
+<li>Results: findings, achievements, experimental&#x2F;factual achievements product</li>
+<li>Conclusion: implication, contribution, recommendation, application, (limitation, future work)<strong>结构解析</strong></li>
+</ul>
+<ol>
+<li>The writer provides background factual information.</li>
+<li>The writer combines the method, the general aim and the specific aim of the study in one sentence.</li>
+<li>The writer summarizes the methodology and provides details.</li>
+<li>The writer indicates the achievement of the study.</li>
+<li>The writer presents the implications of the study.<strong>eg. Abstract</strong><br>[1] The speed of sound in a fluid is determined by, and therefore an indicator of, the thermodynamic properties of that fluid. [2] The aim of this study was to investigate the use of an ultrasonic cell to determine crude oil properties, in particular oil density. [3] An ultrasonic cell was constructed to measure the speed of sound and tested in a crude oil sample.[a]The speed of sound was measured at temperatures between 260 and 411 K at pressures up to 75 MPs. [4] The measurements were shown to lead to an accurate determination of the bubble point of the oil. [5] This indicates that there is a possibility of obtaining fluid density from sound speed measurements and suggests that it is possible to measure sound absorption with an ultrasonic cell to determine oil viscosity.</li>
+</ol>
+<h2 id="2、title论文题目"><a href="#2、title论文题目" class="headerlink" title="2、title论文题目"></a>2、title论文题目</h2><h3 id="【1】根据经验总结"><a href="#【1】根据经验总结" class="headerlink" title="【1】根据经验总结"></a>【1】根据经验总结</h3><p>根据文章定位、期刊偏好、内容等</p>
+<h3 id="【2】根据摘要精炼标题"><a href="#【2】根据摘要精炼标题" class="headerlink" title="【2】根据摘要精炼标题"></a>【2】根据摘要精炼标题</h3><img src="https://s2.loli.net/2023/03/12/4CaTfo2EQbMS8AK.png" width="60%">
+
+<h2 id="3、检查内容"><a href="#3、检查内容" class="headerlink" title="3、检查内容"></a>3、检查内容</h2><h3 id="【1】英文表达方面"><a href="#【1】英文表达方面" class="headerlink" title="【1】英文表达方面"></a>【1】英文表达方面</h3><p>1、检查全文的专有名词缩写（对照词表）</p>
+<p>全称和缩写，正文中出现过全称，并给出缩写后，后续可以直接用缩写。<br>2、大小写<br>除非专有名词，如Section X, Figure Y, Shanghai Jiao Tong University等，一般不做首字母大写</p>
+<p>3、英文时态</p>
+<blockquote>
+<p>review 一般过去时</p>
+<p>methodology 一般现在时</p>
+<p>case 一般过去时</p>
+<p>conclusion 一般现在时</p>
+</blockquote>
+<p>4、英文语法和同义词</p>
+<p>Grammarly高级版</p>
+<p>Ludwig同义词</p>
+<p>*语法问题：避免长句，不超过两个从句</p>
+<p>5、格式+序号</p>
+<p>公式：<a target="_blank" rel="noopener" href="https://editor.codecogs.com/?lang=zh-cn">https://editor.codecogs.com/?lang=zh-cn</a></p>
+<p>表格：<a target="_blank" rel="noopener" href="https://www.tablesgenerator.com/latex_tables">https://www.tablesgenerator.com/latex_tables</a></p>
+<p>图片：<a target="_blank" rel="noopener" href="https://app.diagrams.net/">https://app.diagrams.net/</a></p>
+<p>正文样式，一般我们用times new roman，小四，最小1.15行距</p>
+<h3 id="【2】查重"><a href="#【2】查重" class="headerlink" title="【2】查重"></a>【2】查重</h3><p>1、英文学术查重iThenticate</p>
+<p>我是直接去某宝搜的“turnitin查重”，找了个比较便宜的进去，看了看评论，感觉还可以。主要就是看查重会不会被收录！大家一定要记住，一定要问清楚会不会被收录！再结合评论看有没有被收录的评论。某宝上有的地方你查一次就被收录了，这样你再给学校交论文的时候，重复率就是100%。</p>
+<p>2、CrossCheck</p>
+<h3 id="【3】关键结论"><a href="#【3】关键结论" class="headerlink" title="【3】关键结论"></a>【3】关键结论</h3><p>1、文献综述的总结 GAP</p>
+<p>2、methodology的总结，方法的好处</p>
+<p>3、conclusion全文贡献</p>
+<h3 id="【4】润色机构"><a href="#【4】润色机构" class="headerlink" title="【4】润色机构"></a>【4】润色机构</h3><p>ChatGPT润色</p>
+<h3 id="【5】匿名要求-针对会议论文单盲、双盲、三盲的要求"><a href="#【5】匿名要求-针对会议论文单盲、双盲、三盲的要求" class="headerlink" title="【5】匿名要求,针对会议论文单盲、双盲、三盲的要求"></a>【5】匿名要求,针对会议论文单盲、双盲、三盲的要求</h3><figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="params">#</span>改变全局匿名,增加anonymous</span><br><span class="line"><span class="keyword">\\</span>documentclass[sigconf,anonymous, nonacm]&#123;acmart&#125;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>改为自己的投稿号</span><br><span class="line"><span class="keyword">\\</span>acmSubmissionID&#123;84&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="四、投递阶段"><a href="#四、投递阶段" class="headerlink" title="四、投递阶段"></a>四、投递阶段</h1><h2 id="0、解读作者指南"><a href="#0、解读作者指南" class="headerlink" title="0、解读作者指南"></a>0、解读作者指南</h2><p>期刊要求 重复率</p>
+<p>格式：参考文献风格</p>
+<p>引用同期刊论文</p>
+<h2 id="1、初次投递"><a href="#1、初次投递" class="headerlink" title="1、初次投递"></a>1、初次投递</h2><h3 id="1、邮件正文"><a href="#1、邮件正文" class="headerlink" title="1、邮件正文"></a>1、邮件正文</h3><p>编写邮件正文,沟通过程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Dear Dr. Yasser Dessouky,</span><br><span class="line"></span><br><span class="line">Here is Wenyu YUAN, a PhD student of Shanghai Jiao Tong university, the first author of the manuscript CAIE-D-22-02833 entitled EXPLORATION OF A CONTEXT-AWARE SMART PRODUCT-SERVICE SYSTEM DEVELOPMENT APPROACH.</span><br><span class="line">Thank you for your prompt response and candid rejection of the previous submission. I feel very sorry that in the previous manuscript, we directly quoted the descriptions of others’ studies in Literature Review section. We have carefully revised the manuscript and reorganized the related statements based on our own understanding.</span><br><span class="line">Considering the core content of this manuscript is still original and focuses on the methodology innovation of smart product-service systems, we believe this work is in line with the scope of CAIE such as &quot;30.050: Design Methodology - Innovative Applications to Product/Process/Service/Organizational Design/Problem Solving&quot; and &quot;100.010: Information System Design&quot;.</span><br><span class="line">Computers &amp; Industrial Engineering is one of the most cutting-edge and advanced journals in this field. We hope to get the opportunity of peer review on CAIE and have a chance for a new submission. This decision has been adequately discussed among the authors.</span><br><span class="line">Is it fine if we submit our revised version to your prestigious journal?</span><br><span class="line"></span><br><span class="line">Your kind consideration will be greatly appreciated.</span><br><span class="line"></span><br><span class="line">Best Regards</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、coverletter"><a href="#2、coverletter" class="headerlink" title="2、coverletter"></a>2、coverletter</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Dear Editor:</span><br><span class="line">We submit hereby the manuscript entitled: “EXPLORATION OF A CONTEXT- AWARE SMART PRODUCT-SERVICE SYSTEM DEVELOPMENT APPROACH”. All authors have read this manuscript and would like to have it considered exclusively for publication in Computers &amp; Industrial Engineering. None of the material related to this manuscript has been published or is under consideration for publication elsewhere, including on the internet. We submit this manuscript based on the following reasons:</span><br><span class="line">1. Background and Significance:</span><br><span class="line">With the advancement in information and communication technologies (ICT), the smart product-service system (SPSS) has attracted much research attention. The capture and analysis of users&#x27; dynamic situations are crucial for generating personalized services, thus context awareness with better self-adaptation and implicit requirement mining capability appears promising to cope with this issue. However, the development approach integrating context analysis perspective to SPSS has not been fully explored. Therefore, this study aims to provide a novel understanding of context awareness, propose the conceptual framework of context-aware SPSS (CA- SPSS) and contribute a CA-SPSS development approach.</span><br><span class="line">2. Originality and Novelties:</span><br><span class="line">This research is promising to contribute:</span><br><span class="line">i) a novel understanding and the conceptual framework of CA-SPSS;</span><br><span class="line">ii) a CA-SPSS development approach specifically including the context acquisition stage (in which a wireless sensor network with wearable devices to acquire user physiological data was created), context modeling stage (where data collection, storage, and analysis of user context, physical context, sensed context and inferred context were arranged), context reasoning stage (where deep neural network models were deployed for user modality detection), and context distribution stage (in which an multi-criteria decision making process was employed to form personalized service strategies);</span><br><span class="line">iii) a CA-SPSS for supporting non-professional sports competition was developed to recognize runners&#x27; exercise intensity modality and provide personalized services.</span><br><span class="line">3. Interests for readers:</span><br><span class="line">The results showed that the modality-detection model deployed in the system is performing better than the traditional machine learning models. According to pilot user experiments, the satisfaction of personalized service bundles and intelligence exceed expectations. Based on the case illustration, the proposed CA-SPSS approach contributes to extend the context definition and effectively guides the development of SPSS, especially in sports and mobile health areas.</span><br><span class="line">We would be very grateful if the submitted manuscript could be reviewed and considered for publication in Computers &amp; Industrial Engineering.</span><br><span class="line">Your kind consideration will be greatly appreciated.</span><br><span class="line">Best Regards,</span><br><span class="line">Danni CHANG dchang1@sjtu.edu.cn Shanghai Jiao Tong University</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、title-page"><a href="#3、title-page" class="headerlink" title="3、title page"></a>3、title page</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Title:</span><br><span class="line">A CONTEXT-AWARE SMART PRODUCT-SERVICE SYSTEM DEVELOPMENT APPROACH AND APPLICATION CASE</span><br><span class="line"></span><br><span class="line">Author Name:</span><br><span class="line">Wenyu Yuana (Ph.D. student), Danni Changa,* (Ph.D.), Ting Hana,* (Ph.D.)</span><br><span class="line"></span><br><span class="line">Author Affiliation:</span><br><span class="line">a School of Design, Shanghai Jiao Tong University, Shanghai, China</span><br><span class="line"></span><br><span class="line">Corresponding Author:</span><br><span class="line">Danni Chang, vice-professor, dchang1@sjtu.edu.cn</span><br><span class="line">Ting Han, professor, hanting@sjtu.edu.cn</span><br><span class="line"></span><br><span class="line">Permanent address:</span><br><span class="line">Address: No. 800, Dongchuan Road, Shanghai</span><br><span class="line">Postcode: 200240</span><br><span class="line">Tel: 86-21-54740000</span><br><span class="line"></span><br><span class="line">Acknowledgements:</span><br><span class="line">This study was supported by the National Natural Science Foundation of China (Grant No. 71802132).</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、highlights"><a href="#4、highlights" class="headerlink" title="4、highlights"></a>4、highlights</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A novel framework of the context-aware SPSS development approach was developed</span><br><span class="line">Context definition in physical exercise and mobile healthcare fields was extended</span><br><span class="line">Exercise modality-detection model for non-professional race runners was established</span><br><span class="line">An SPSS case for supporting Non-Professional Sports Competitions was conducted</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、编辑意见回复"><a href="#2、编辑意见回复" class="headerlink" title="2、编辑意见回复"></a>2、编辑意见回复</h2><h3 id="1、通读comments"><a href="#1、通读comments" class="headerlink" title="1、通读comments"></a>1、通读comments</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">审稿人 #1：这篇论文组织良好，技术上合理。 1、但是，作者从未提及情境感知推荐系统 (CARS)。 目前尚不清楚 CARS 技术是否可以应用于正在考虑的研究领域。</span><br><span class="line">Thanks for your suggestion, we have added the content about CARS in section2.2 and section 5.1.3.</span><br><span class="line">2、此外，与其他人相比，作者可以更好地讨论他们的方法的潜力。【discussion 增加综述的讨论】.</span><br><span class="line">Thanks for your suggestion, we have added the section 5.1.3 to discuss the potential of our approach compared to others.</span><br><span class="line">3、最后，在第 2 节中，作者应指出上下文表示和管理的主要模型（例如上下文维度树）</span><br><span class="line">Thanks for your suggestion, we have rewritten the first paragraph of section2.2 and added related methods of context representation and management.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、Coverletter"><a href="#2、Coverletter" class="headerlink" title="2、Coverletter"></a>2、Coverletter</h3><p>Dear Editor XX and Reviewers:</p>
+<p>这里有杂志要求开头写上（最好写上，没毛病）如下信息:</p>
+<p>Manuscript ID（特别是这个，便于审稿人和编辑查找）和Type:（research    article）信息的。具体看投稿系统要求。但是一般情况下，是修改后重投的要重新标注上。</p>
+<p>内容应简短扼要地用几句话交代给编辑的是对于这次修改的反馈. 当然，每次返修改动过后，建议都要有新的coverletter给编辑.（因为，你每次改动的肯定不一样吧。这个是重点：因为编辑的权利和责任都很大，他自己也得了解你的修改工作啊，也就是说，你最好简单明了的汇报你的修改工作，让他清楚）</p>
+<ul>
+<li>声明：（这是个八股，每次都写上）声明该文稿（全文或部分）并没有同时投稿或发表在其他期刊、所有的作者皆已阅读并同意文稿内容、您已经遵照所有的道德准则也收到相关单位或委员会的允许。披露所有的潜在利益冲突</li>
+<li>感谢编辑花时间阅读您的投稿信并考虑您的论文</li>
+<li>落款处提供通讯作者信息，包含邮箱地址及电话号码，高级别文章可以写双通讯，但是包含的邮箱地址及电话号码也要并列写上</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Dear Editors and Reviewers,</span><br><span class="line">Thank you very much for taking the time to go through our manuscript and to provide constructive comments and suggestions. We have tried to address each of them as summarized below, and trust that the version has enhanced the quality of the manuscript. Specific modifications are indicated below with the updated locations in specific highlight color. Please refer to the revised manuscript for corresponding section information.</span><br><span class="line"></span><br><span class="line">Dear reviewers:</span><br><span class="line">We are very grateful to your comments for the manuscript. According with your advice, we tried our best to amend the relevant part and made some changes in the manuscript. These changes will not influence the content and framework of the paper. All of your questions were answered below. And here we list the changes and marked in blue in revised paper.</span><br><span class="line">We appreciate for Reviewers’ warm work earnestly, and hope that the correction will meet with approval.</span><br><span class="line">Should you have any questions, please contact us without hesitate.</span><br><span class="line">Once again, thank you very much for your comments and suggestions.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、Response"><a href="#3、Response" class="headerlink" title="3、Response"></a>3、Response</h3><p>语言诚恳、多写分析过程</p>
+<p>复制审稿人的原话：。。。</p>
+<p>Response: We appreciate it very much for this good suggestion, and we have done it according to your ideas.    接着可以说具体怎么改的。</p>
+<p>（1）第一、自己的确是格式错了，图标注错了，或文字写错了。</p>
+<p>Response:</p>
+<p>直接回答之前的错误，现在已经改正就好了  比如：We are very sorry for our incorrect writing and it is rectified at Line …或者We are very sorry for our negligence of the explanation</p>
+<p>（2）第二，不太同意审稿人的观点，轻度argue。</p>
+<p>Response:</p>
+<p>We agree with you that…., however, ……”的句式。或者As Reviewer suggested that It is important to … However,</p>
+<p>（3）第三，需补充实验但客观条件上不允许怎么回复：（只针对确实没有办法完成补充实验）</p>
+<p>-对审稿人的意见表示赞同：We agree that more study or more data would be useful to</p>
+<p>-对实际情况进行说明：Plan A:最好可以从文献中找到依据来说明，你得说，不仅仅是你自己做不了，别人也做不了。</p>
+<p>（4）万能套话：<br>It is really a great suggestion as Reviewer pointed out that</p>
+<p>It is really a good idea as Reviewer suggested, and we have changed them all to meet Reviewer’s thoughts.</p>
+<p>Considering the Reviewer’s suggestion, we have added</p>
+<p>According to your suggestion,</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Dear Editors and Reviewers,</span><br><span class="line">Thank you very much for taking the time to go through our manuscript and to provide constructive comments and suggestions. We have tried to address each of them as summarized below, and trust that the version has enhanced the quality of the manuscript. Specific modifications are indicated below with the updated locations in specific highlight color. Please refer to the revised manuscript for corresponding section information.</span><br><span class="line"></span><br><span class="line">Reviewer #1</span><br><span class="line"></span><br><span class="line">Comment 1: The paper is well-organised and technically sound. However, the authors never refer to Context-Aware Recommender Systems (CARS). It is unclear whether CARS techniques can be applied in the research area under consideration.</span><br><span class="line"></span><br><span class="line">Response: The authors thank the reviewer very much for the important suggestion. We have carefully studied Context-Aware Recommender Systems (CARS). It is a very important research area, which incorporates context information into the recommender systems to improve the recommendation quality in certain environments. Related studies have been referred in Section 2.</span><br><span class="line">“(In Section 2.2) ... To better improve the service recommendation quality, context- aware recommender systems (CARS) were studied. CARS can offer personalized services by deeply analyzing user context, and has been successfully applied in e- commerce Personalization (Palmisano et al., 2008), ubiquitous and mobile systems (Chen &amp; Kotz, 2000), marketing and management areas (Prahalad, 2004).”</span><br><span class="line">To discuss the applicability of CARS in the research area under consideration, a special paragraph was added in Conclusions, in order to illustrate the differences between CARS and the proposed approach.</span><br><span class="line">“(In Section 5.2) Generally, the proposed approach in this study synthesizes context awareness and SPSSs, and indicates potential in better applicability. Compared with existing CARS, which incorporate contextual information to increase the recommendation quality (Adomavicius &amp; Tuzhilin, 2011), the proposed approach puts more focus on users, especially in the deep understanding of user needs and experience. Compared with user-centric SPSS approaches, which aim to overcome the technical limitations and rely on qualitative user analysis procedures (Chang et al., 2019; Bu et al., 2021), this study can be more efficient in user research time and costs, since it offers a full-process data-driven approach that consolidates context acquiring, context modeling, context reasoning, and context distributing. It can automatically perceive and determines user modality, and shows potential to understand the implicit user needs and customize PSB recommendations more efficiently.”</span><br><span class="line"></span><br><span class="line">Comment 2: Furthermore, the authors could better discuss the potential of their approach compared to others.</span><br><span class="line"></span><br><span class="line">Response: The authors thank the reviewer for the important suggestion. A special paragraph was added in Conclusions to discuss the anticipated potential of the proposed approach. We compared the proposed approach with CARS and user-centric SPSS approaches. Generally, the proposed approach puts more focus on the perception of user status and the mining of essential context information. It can automatically infer users&#x27; modality, and may be advantageous in tackling users’ implicit requirements and offering personalized PSBs recommendations.</span><br><span class="line">“(In Section 5.2) Generally, the proposed approach in this study synthesizes context awareness and SPSSs, and indicates potential in better applicability. Compared with existing CARS, which incorporate contextual information to increase the recommendation quality (Adomavicius &amp; Tuzhilin, 2011), the proposed approach puts more focus on users, especially in the deep understanding of user needs and experience. Compared with user-centric SPSS approaches, which aim to overcome the technical limitations and rely on qualitative user analysis procedures (Chang et al., 2019; Bu et al., 2021), this study can be more efficient in user research time and costs, since it offers a full-process data-driven approach that consolidates context acquiring, context modeling, context reasoning, and context distributing. It can automatically perceive and determines user modality, and shows potential to understand the implicit user needs and customize PSB recommendations more efficiently.”</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、正文修改的Word，高亮显示修改处"><a href="#4、正文修改的Word，高亮显示修改处" class="headerlink" title="4、正文修改的Word，高亮显示修改处"></a>4、正文修改的Word，高亮显示修改处</h3>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Dr.yuan</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2025/06/26/%E8%AE%BA%E6%96%87-SCI%E8%AE%BA%E6%96%87%E5%86%99%E6%B3%95%E7%BB%93%E5%90%88CA-SPSS/">http://example.com/2025/06/26/%E8%AE%BA%E6%96%87-SCI%E8%AE%BA%E6%96%87%E5%86%99%E6%B3%95%E7%BB%93%E5%90%88CA-SPSS/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%AE%BA%E6%96%87/"># 论文</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/06/30/hello-world/">Hello World</a>
+            
+            
+            <a class="next" rel="next" href="/2025/06/26/%E8%AE%BA%E6%96%87-LaTeX-overleaf%E6%95%99%E7%A8%8B/">[论文]LaTeX-overleaf教程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Dr.yuan | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
